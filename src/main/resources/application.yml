@@ -1,0 +1,7 @@
+mybatis:
+    type-aliases-package: com.zgc.mtl.model
+    #type-handlers-package: com.example.typehandler
+    configuration:
+        map-underscore-to-camel-case: true
+        default-fetch-size: 100
+        default-statement-timeout: 30
