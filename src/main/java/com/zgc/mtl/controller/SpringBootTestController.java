@@ -1,13 +1,23 @@
 package com.zgc.mtl.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zgc.mtl.model.Person;
+import com.zgc.mtl.service.ITestService;
+
+import net.minidev.json.JSONObject;
+
 @RestController
-@RequestMapping("mtl")
 public class SpringBootTestController {
 
+	@Autowired
+	ITestService testService;
+	
 	@RequestMapping("bootTest")
 	public String bootTest() {
 //		System.out.println("spring boot start up");
@@ -23,5 +33,14 @@ public class SpringBootTestController {
 	@RequestMapping("methodParam")
 	public void methodParam(String age) {
 		System.out.println("年龄是："+age);
+	}
+	
+	/**
+	 * 数据库测试
+	 */
+	@RequestMapping("getAllPersons")
+	public List<Person> getAllPersons() {
+		List<Person> persons = testService.getPersons();
+		return persons;
 	}
 }
