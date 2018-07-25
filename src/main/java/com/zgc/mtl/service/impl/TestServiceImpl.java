@@ -23,7 +23,7 @@ public class TestServiceImpl implements ITestService {
 	@Override
 	public List<Person> getPersons() {
 		// TODO Auto-generated method stub
-		return testDao.queryAll();
+		return testDao.getAllPersons();
 	}
 
 }

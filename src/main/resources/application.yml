@@ -1,6 +1,6 @@
-server:
-  port: 8090
-  contextPath: /mtl
+#server:
+  #port: 8090
+  #contextPath: /mtl
 
 spring:
   profiles : dev
@@ -23,6 +23,6 @@ spring:
     
     
 mybatis: 
-  mapperLocations: classpath*:mapper/*.xml
+  mapperLocations: classpath:mapper/*.xml
   typeAliasesPackage: com.zgc.mtl.model
-  config-location: classpath:mybatis-config.xml
+  configLocation: classpath:mybatis-config.xml
