@@ -1,13 +1,11 @@
-#server:
-  #port: 8090
-  #contextPath: /mtl
+server:
+  port: 8082
 
 spring:
-  profiles : dev
   datasource:
     name: mydb
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -23,6 +21,6 @@ spring:
     
     
 mybatis: 
-  mapperLocations: classpath:mapper/*.xml
+  mapperLocations: classpath*:com.zgc.mtl.dao/*Mapper.xml
   typeAliasesPackage: com.zgc.mtl.model
   configLocation: classpath:mybatis-config.xml

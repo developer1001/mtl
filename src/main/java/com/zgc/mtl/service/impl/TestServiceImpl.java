@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zgc.mtl.dao.TestDao;
+import com.zgc.mtl.dao.FirstDao;
 import com.zgc.mtl.model.Person;
 import com.zgc.mtl.service.ITestService;
 
@@ -13,7 +13,7 @@ import com.zgc.mtl.service.ITestService;
 public class TestServiceImpl implements ITestService {
 
 	@Autowired
-	TestDao testDao;
+	FirstDao testDao;
 	@Override
 	public void printString() {
 		// TODO Auto-generated method stub
