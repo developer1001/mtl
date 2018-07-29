@@ -1,7 +1,28 @@
-mybatis:
-    type-aliases-package: com.zgc.mtl.model
-    #type-handlers-package: com.example.typehandler
-    configuration:
-        map-underscore-to-camel-case: true
-        default-fetch-size: 100
-        default-statement-timeout: 30
+server:
+  port: 8082
+  servlet:  
+   context-path: /mtl
+
+spring:
+  datasource:
+    name: mydb
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    minIdle: 1
+    maxActive: 10
+    initialSize: 3
+    timeBetweenEvictionRunsMillis: 3000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'ZTM' FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false 
+    
+    
+mybatis: 
+  mapperLocations: classpath*:mapper/*.xml
+  typeAliasesPackage: com.zgc.mtl.model
+  configLocation: classpath:mybatis-config.xml

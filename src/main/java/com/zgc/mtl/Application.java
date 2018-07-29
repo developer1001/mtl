@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
  *Author:laoyangtou
  *2018年7月24日 下午4:03:02
  */
-@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
+@SpringBootApplication()
 @MapperScan(basePackages = {"com.zgc.mtl.dao"})
 public class Application {
     public static void main( String[] args ){
