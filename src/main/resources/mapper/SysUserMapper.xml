@@ -20,6 +20,11 @@
             resultType="com.zgc.mtl.model.SysUser">
         select * from sys_user where id=#{id}
     </select>
+     <!--登录验证-->
+    <select id="login" 
+            resultType="com.zgc.mtl.model.SysUser">
+        select * from sys_user where password=#{password} and login_name=#{loginName}
+    </select>
     <!--&lt;!&ndash; 查询所有的用户 &ndash;&gt;-->
     <select id="findAllObj" resultType="com.zgc.mtl.model.SysUser">
         select * from sys_user;

@@ -21,5 +21,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements ISys
 		// TODO Auto-generated method stub
 		return sysUserDao;
 	}
+	@Override
+	public SysUser login(String loginName, String password) {
+		return sysUserDao.login(loginName, password);
+	}
 
 }
