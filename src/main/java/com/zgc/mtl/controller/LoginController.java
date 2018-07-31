@@ -6,6 +6,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.zgc.mtl.base.model.Json;
 import com.zgc.mtl.model.SysUser;
 import com.zgc.mtl.service.ISysUserService;
@@ -22,7 +25,8 @@ public class LoginController {
 	  ISysUserService loginService;
 
 	    @RequestMapping("login")
-	    public void login(String loginName, String password,HttpServletRequest request)throws Exception{
+	    @ResponseBody
+	    public Json login(String loginName, String password,HttpServletRequest request)throws Exception{
 	        SysUser sysUser = loginService.login(loginName.trim(),MD5.MD5Encrypt(password));
 	        if (sysUser != null && sysUser.getIsActive() == 1){
 	            HttpSession session = request.getSession();
@@ -30,15 +34,17 @@ public class LoginController {
 	                session.removeAttribute("loginUser");
 	            session.setAttribute("loginUser",sysUser);
 	            Json json = new Json(true,sysUser);
+	            return json;
 	        }
 	        else{
 	            Json json = new Json(false,"用户信息错误，请重试");
+	            return json;
 	        }
 	    }
 
 	    @RequestMapping("index")
-	    public String loginIndex()throws Exception{
-	        return "main";
+	    public ModelAndView loginIndex() throws Exception{
+	        return new ModelAndView("views/main");
 	    }
 
 	    @RequestMapping("logout")

@@ -142,7 +142,8 @@
 			return false;
 		}else{//登录
 			//调用后台登录验证的方法
-			alert('登录成功');
+			loginBycontroller(username,password);
+		/* 	alert('登录成功'); */
 			return false;
 		}
 	}
@@ -334,7 +335,31 @@
 		}
 	}
 	
-	
+	function loginBycontroller(name,password){
+//	    var remember = $("input[type='checkbox']").is(':checked');
+	    $.ajax({
+	        url:"login",
+	        method:"post",
+	        dataType:"json",
+	        data:{
+	            loginName:name,
+	            password:password
+	            //remember:remember?'yes':'no'
+	        },
+	        success:function (data) {
+	            if (data.success){
+	                var loginUser = {};
+	                loginUser.id = data.data.id;
+	                loginUser.loginName = data.data.loginName;
+	                loginUser.userName = data.data.userName;
+	                localStorage.setItem("loginUser",JSON.stringify(loginUser));
+	                window.location.href="views/main.html";
+	            }
+	            else
+	                alert(data.msg);
+	    }
+	    })
+	}
 	
 	
 	
