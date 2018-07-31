@@ -8,6 +8,6 @@ public class StringUtil {
      */
     public static boolean isValid(String str){
 
-        return (!str.trim().equals("") && str != null && !str.trim().equals("null"));
+        return (str != null && !str.trim().equals("") &&  !str.trim().equals("null"));
     }
 }
