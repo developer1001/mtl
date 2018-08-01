@@ -2,18 +2,18 @@ package com.zgc.mtl.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.zgc.mtl.model.Person;
 import com.zgc.mtl.service.ITestService;
 
-import net.minidev.json.JSONObject;
-
 @RestController
 public class SpringBootTestController {
+	private static final Logger log = LoggerFactory.getLogger(SpringBootTestController.class);
 
 	@Autowired
 	ITestService testService;
@@ -21,6 +21,7 @@ public class SpringBootTestController {
 	@RequestMapping("bootTest")
 	public String bootTest() {
 //		System.out.println("spring boot start up");
+		log.info("info-{}-{}","bootTest","测试");
 		return "start up";
 	}
 	
