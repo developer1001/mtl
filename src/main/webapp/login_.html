@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title></title>
+<meta name="description" content="登录界面">
+<meta name="keywords" content="登录界面">
+<link href="" rel="stylesheet">
+<script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+<style>
+	body,p,div,ul,li,h1,h2,h3,h4,h5,h6{
+		margin:0;
+		padding: 0;
+	}
+	body{
+		background: #E9E9E9; 
+	}
+	#login{
+		width: 400px;
+		height: 250px;
+		background: #FFF;
+		margin:200px auto;
+		position: relative;
+	}
+	#login h1{
+		text-align:center;
+		position:absolute;
+		left:120px;
+		top:-40px;
+		font-size:21px;
+	}
+	#login form p{
+		text-align: center;
+	}
+	#user{
+		background:url(static/img/user.png) rgba(0,0,0,.1) no-repeat;
+		width: 200px;
+		height: 30px;
+		border:solid #ccc 1px;
+		border-radius: 3px;
+		padding-left: 32px;
+		margin-top: 50px;
+		margin-bottom: 30px;
+	}
+	#pwd{
+		background: url(static/img/pwd.png) rgba(0,0,0,.1) no-repeat;
+		width: 200px;
+		height: 30px;
+		border:solid #ccc 1px;
+		border-radius: 3px;
+		padding-left: 32px;
+		margin-bottom: 30px;
+	}
+	#submit{
+		width: 232px;
+		height: 30px;
+		background: rgba(0,0,0,.1);
+		border:solid #ccc 1px;
+		border-radius: 3px;
+	}
+	#submit:hover{
+		cursor: pointer;
+		background:#D8D8D8;
+	}
+</style>
+<script>
+	
+function loginBycontroller(){
+//    var remember = $("input[type='checkbox']").is(':checked');
+    $.ajax({
+        url:"login",
+        method:"get",
+        dataType:"json",
+        data:{
+            loginName:$("#user").val(),
+            password:$("#pwd").val()
+            //remember:remember?'yes':'no'
+        },
+        success:function (data) {
+            if (data.success){
+                var loginUser = {};
+                loginUser.id = data.data.id;
+                loginUser.loginName = data.data.loginName;
+                loginUser.userName = data.data.userName;
+                localStorage.setItem("loginUser",JSON.stringify(loginUser));
+                window.location.href="views/main.html";
+            }
+            else
+                alert(data.msg);
+    }
+    })
+}
+</script>
+</head>
+<body>
+<div id="login">
+	<form action="" method="post">
+		<p><input type="text" name="user" id="user" placeholder="用户名"></p>
+		<p><input type="password" name="passw0rd" id="pwd" placeholder="密码"></p>
+		<p><input type="submit" id="submit" value="登录" onclick="loginBycontroller()"></p>
+	</form>
+</div>
+</body>
+</html>
