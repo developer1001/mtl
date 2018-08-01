@@ -20,7 +20,10 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false 
-    
+    mvc:
+    view:
+    prefix: /
+    suffix: .html
     
 mybatis: 
   mapperLocations: classpath*:mapper/*.xml
