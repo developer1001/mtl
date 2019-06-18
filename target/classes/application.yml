@@ -2,6 +2,8 @@ server:
   port: 8082
   servlet:  
    context-path: /mtl
+  logging:
+   config: classpath:log4j.properties
 
 spring:
   datasource:
@@ -20,7 +22,10 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false 
-    
+    mvc:
+    view:
+    prefix: /
+    suffix: .html
     
 mybatis: 
   mapperLocations: classpath*:mapper/*.xml
