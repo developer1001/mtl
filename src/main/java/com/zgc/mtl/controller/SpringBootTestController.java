@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,23 +55,29 @@ public class SpringBootTestController {
 	public Object multiTask() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("map1", "map1");
+		sysUserService.deleteById(11);
 		new Thread(new MultiTaskTest()).start();
 		return map;
 	}
 	
-	private class MultiTaskTest implements Runnable {
+	private class MultiTaskTest  implements Runnable {
 		@Override
-		public void run() {
-			System.out.println("开始"+System.currentTimeMillis());
+		public void run(){
 			try {
-				Thread.sleep(10000);
+				task();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println(sysUserService == null );
-			sysUserService.deleteById(9);
-			System.out.println("结束"+System.currentTimeMillis());
+		}
+		
+		private void task() throws InterruptedException {
+			long s = System.currentTimeMillis();
+			System.out.println("开始"+System.currentTimeMillis());
+			Thread.sleep(10000);
+			sysUserService.add(null);
+			System.out.println("结束,耗时："+(System.currentTimeMillis() - s) + "ms");
+
 		}
 
 	}

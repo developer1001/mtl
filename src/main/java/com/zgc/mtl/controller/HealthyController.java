@@ -11,7 +11,7 @@ import com.zgc.mtl.base.model.Json;
  * @author yang
  */
 @RequestMapping("healthy")
-public class HealthyController {
+public class HealthyController{
 	
 	@RequestMapping("bgm")
 	@ResponseBody
