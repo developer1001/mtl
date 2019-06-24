@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width" />
+<title>Index</title>
+<script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(init);
+        function init() {
+            $(":file").change(uploadfile);
+        }
+        function uploadfile() {
+            var fileobj = document.getElementById("upfile").files[0];
+          
+            var flnm = fileobj.name;
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(fileobj);
+            reader.onload = function () {
+                var byts = new Uint8Array(this.result);
+                var bytarr = [];
+                for (var i = 0; i < byts.length; i++) {
+                    bytarr.push(byts[i]);
+                }
+                var datas = {
+                    	"voiceFormat":document.getElementById("voiceFormat").value, 
+                    	"engSerViceType":document.getElementById("engSerViceType").value, 
+                    	"fileByteArr":bytarr
+                    	};
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8082/mtl/audio/exchange",
+                    data: JSON.stringify(datas),
+                    dataType: "json",
+                    contentType:"application/json;charset=UTF-8",
+                    success: function(data){
+                    	console.log(data);
+                    	document.getElementById("content").innerHTML = data.Response.Result;
+                             }
+                });
+            }
+        }
+           </script>
+</head>
+<body>
+	<select id = "voiceFormat">
+	<option value = "mp3">mp3</option>
+	<option value = "wav">wav</option>
+	</select>
+	<select id = "engSerViceType">
+	<option value = "8k">8k</option>
+	<option value = "16k">16k</option>
+	</select>
+	<input type="file" id="upfile"/>
+	<div id = "content"></div>
+</body>
+</html>
