@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width" />
+<meta charset="utf-8">
 <title>Index</title>
 <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -10,21 +11,25 @@
             $(":file").change(uploadfile);
         }
         function uploadfile() {
+        	var start = new Date().getTime();
             var fileobj = document.getElementById("upfile").files[0];
-          
             var flnm = fileobj.name;
             var reader = new FileReader();
-            reader.readAsArrayBuffer(fileobj);
+            //reader.readAsArrayBuffer(fileobj);
+            reader.readAsDataURL(fileobj);  
             reader.onload = function () {
-                var byts = new Uint8Array(this.result);
+              /*   var byts = new Uint8Array(this.result);
                 var bytarr = [];
                 for (var i = 0; i < byts.length; i++) {
                     bytarr.push(byts[i]);
-                }
+                } */
+                var dataBase64= this.result; // result是你读取到的文件内容，此属性读取完成才能使用
+                var bytarr = dataBase64.split(";base64,");//base64文件内容
+                console.log("文件转耗时："+(new Date().getTime()-start)+"毫秒");
                 var datas = {
                     	"voiceFormat":document.getElementById("voiceFormat").value, 
                     	"engSerViceType":document.getElementById("engSerViceType").value, 
-                    	"fileByteArr":bytarr
+                    	"fileByteArr":bytarr[1].toString()
                     	};
                 $.ajax({
                     type: "POST",

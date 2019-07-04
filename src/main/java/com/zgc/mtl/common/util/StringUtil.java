@@ -1,4 +1,4 @@
-package com.zgc.mtl.util;
+package com.zgc.mtl.common.util;
 
 public class StringUtil {
     /**

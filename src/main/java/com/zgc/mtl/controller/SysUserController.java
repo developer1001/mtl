@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.zgc.mtl.base.model.Json;
+import com.zgc.mtl.common.util.MD5;
+import com.zgc.mtl.common.util.StringUtil;
 import com.zgc.mtl.model.SysUser;
 import com.zgc.mtl.service.ISysUserService;
-import com.zgc.mtl.util.MD5;
-import com.zgc.mtl.util.StringUtil;
 /**
  * 
  *description: 系统用户

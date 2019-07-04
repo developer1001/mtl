@@ -1,6 +1,6 @@
-package com.zgc.mtl.util;
+package com.zgc.mtl.common.util;
 
-public class AudioExchangeRequest {
+public class AudioExchangeRequest2 {
 	/**
 	 * 音频类型，WAV或MP3
 	 */
@@ -12,7 +12,7 @@ public class AudioExchangeRequest {
 	/**
 	 * 文件被转成的字节数组
 	 */
-	private byte[] fileByteArr;
+	private String fileByteArr;
 	
 	public String getVoiceFormat() {
 		return voiceFormat;
@@ -26,11 +26,12 @@ public class AudioExchangeRequest {
 	public void setEngSerViceType(String engSerViceType) {
 		this.engSerViceType = engSerViceType;
 	}
-	public byte[] getFileByteArr() {
+	public String getFileByteArr() {
 		return fileByteArr;
 	}
-	public void setFileByteArr(byte[] fileByteArr) {
+	public void setFileByteArr(String fileByteArr) {
 		this.fileByteArr = fileByteArr;
 	}
+
 	
 }

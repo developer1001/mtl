@@ -27,7 +27,6 @@ spring:
     prefix: /
     suffix: .html
     
-mybatis: 
+mybatis:
   mapperLocations: classpath*:mapper/*.xml
-  typeAliasesPackage: com.zgc.mtl.model
   configLocation: classpath:mybatis-config.xml

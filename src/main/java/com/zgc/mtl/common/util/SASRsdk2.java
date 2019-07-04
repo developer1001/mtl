@@ -1,8 +1,6 @@
-package com.zgc.mtl.util;
+package com.zgc.mtl.common.util;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -18,9 +16,9 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SASRsdk {
-    private static String SecretId, SecretKey, EngSerViceType, SourceType, VoiceFormat, fileURI;
-    private static byte[] fileByteArr;
+public class SASRsdk2 {
+	private static String SecretId, SecretKey, EngSerViceType, SourceType, VoiceFormat, fileURI;
+    private static String fileByteArr;
 
     public static String formSignstr(String serverUrl, Map<String, String> mapReq) {
         StringBuilder strBuilder = new StringBuilder(serverUrl);
@@ -127,7 +125,7 @@ public class SASRsdk {
             String SourceType,
             String VoiceFormat,
             String fileURI,
-            byte[] fileByteArr
+            String fileByteArr
     ) {
         if (SecretId.length() <= 0) {
             System.out.println("SecretId can not be empty!");
@@ -153,13 +151,13 @@ public class SASRsdk {
             System.out.println("fileURI can not be empty!");
             return -1;
         }
-        SASRsdk.SecretId = SecretId;
-        SASRsdk.SecretKey = SecretKey;
-        SASRsdk.EngSerViceType = EngSerViceType;
-        SASRsdk.SourceType = SourceType;
-        SASRsdk.VoiceFormat = VoiceFormat;
-        SASRsdk.fileURI = fileURI;
-        SASRsdk.fileByteArr = fileByteArr;
+        SASRsdk2.SecretId = SecretId;
+        SASRsdk2.SecretKey = SecretKey;
+        SASRsdk2.EngSerViceType = EngSerViceType;
+        SASRsdk2.SourceType = SourceType;
+        SASRsdk2.VoiceFormat = VoiceFormat;
+        SASRsdk2.fileURI = fileURI;
+        SASRsdk2.fileByteArr = fileByteArr;
         return 0;
     }
 
@@ -188,7 +186,8 @@ public class SASRsdk {
 //				int datalen = fileInputStream.available();
 //				byte[] dataPacket = new byte[datalen];
 //				fileInputStream.read(dataPacket);
-				byte[] dataPacket =  SASRsdk.fileByteArr;
+//				byte[] dataPacket =  SASRsdk2.fileByteArr;
+				byte[] dataPacket = Base64.getDecoder().decode(SASRsdk2.fileByteArr);
 				String Data = Base64.getEncoder().encodeToString(dataPacket);
 //				String DataLen = datalen + "";
 				String DataLen = dataPacket.length + "";
@@ -258,5 +257,6 @@ public class SASRsdk {
 		}
 		return sbResult.toString();
 	}
+	
 
 }
