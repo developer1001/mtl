@@ -1,5 +1,7 @@
 package com.zgc.mtl.common.util;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -33,13 +35,14 @@ public class FileReceiver {
 	public static void main(String[] args){
 		ServerSocket serverSocket = null;
 		Socket socket = null;
+		String filePath = null;
 		try {
 			serverSocket = new ServerSocket(10087);
 			socket = serverSocket.accept();
 			InputStream in = socket.getInputStream();
 			ObjectInputStream ois = new ObjectInputStream(in);
 			MyFile myFile = (MyFile) ois.readObject();
-			String filePath = "d:\\111";
+			filePath = "d:\\111";
 			String fileName = myFile.getFileName();
 			byte[] fileByteArr = myFile.getFileByteArr();
 			FileUtil.toFile(filePath, fileName, fileByteArr);
@@ -50,6 +53,7 @@ public class FileReceiver {
 				if(socket != null) {
 					socket.close();
 				}
+				Desktop.getDesktop().open(new File(filePath));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
