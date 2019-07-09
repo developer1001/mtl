@@ -10,3 +10,4 @@
 3. quartz 简单示例
 4. socket间传输文件示例
 5. 线程池配置示例，spring（ThreadPoolTaskExecutor）
+6. druid数据库连接池配置

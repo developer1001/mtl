@@ -7,25 +7,46 @@ server:
 
 spring:
   datasource:
-    name: mydb
+    name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-    minIdle: 1
-    maxActive: 10
-    initialSize: 3
-    timeBetweenEvictionRunsMillis: 3000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 'ZTM' FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false 
-    mvc:
-    view:
-    prefix: /
-    suffix: .html
+    druid:
+      #监控统计拦截的过滤器 不加监控界面sql无法统计 wall用于防火墙
+      filters: stat,wall,log4j,config
+      #最大连接数
+      max-active: 100
+      #初始化大小
+      initial-size: 5
+      #获取连接最大等待时间
+      max-wait: 60000
+      min-idle: 5
+      #间隔多久检测一次需要关闭的空闲连接 毫秒
+      time-between-eviction-runs-millis: 60000
+      #连接在连接池中最小生存的时间，毫秒
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+        url-pattern: /*
+      stat-view-servlet:
+        #白名单IP
+        allow: 127.0.0.1
+        #黑名单IP
+        #deny: 192.168.0.106
+        #登录账号和密码
+        login-username: admin
+        login-password: admin
+        #启用重置数据功能
+        reset-enable: true
     
 mybatis:
   mapperLocations: classpath*:mapper/*.xml
