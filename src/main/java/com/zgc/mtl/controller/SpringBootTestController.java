@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zgc.mtl.common.util.RedisTool;
 import com.zgc.mtl.model.Person;
 import com.zgc.mtl.service.ISysUserService;
 import com.zgc.mtl.service.ITestService;
@@ -22,6 +23,8 @@ public class SpringBootTestController {
 	ITestService testService;
 	@Autowired
 	ISysUserService sysUserService;
+	@Autowired
+	private RedisTool redisTool;
 	
 	@RequestMapping("bootTest")
 	public String bootTest() {
@@ -34,6 +37,16 @@ public class SpringBootTestController {
 	@RequestMapping("getParam/{id}")
 	public void getParam(@PathVariable("id") String id) {
 		System.out.println("参数是："+id);
+//		String generateSeq = redisTool.generateSeq("mtl-seq", "mtl", 10);
+//		log.info("当前mtl项目序列号是：{}",generateSeq);
+//		System.out.println(generateSeq);
+		Person p = new Person();
+		p.setId(9527);
+		p.setAge("22");
+		p.setName("黄师傅");
+		redisTool.saveObj("9527", p);
+		Person obj = redisTool.getObj("9527", Person.class);
+		System.out.println(obj.getId()+ "," + obj.getAge() + "," + obj.getName());
 	}
 	
 	@RequestMapping("methodParam")
@@ -50,7 +63,12 @@ public class SpringBootTestController {
 		return persons;
 	}
 	
+	/**
+	 * 已废弃，由线程池来处理
+	 * @return
+	 */
 	@RequestMapping("multiTask")
+	@Deprecated
 	public Object multiTask() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("map1", "map1");
