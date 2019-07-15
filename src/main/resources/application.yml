@@ -6,6 +6,15 @@ server:
    config: classpath:log4j.properties
 
 spring:
+  application:
+    name: mtl
+  data:
+    sst:
+      uri: http://127.0.0.1:9200
+      hostlist: 127.0.0.1:9200
+    elasticsearch:
+      #cluster-name: my-application
+      cluster-nodes: 127.0.0.1:9300          
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
