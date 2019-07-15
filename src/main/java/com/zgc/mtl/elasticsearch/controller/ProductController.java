@@ -84,9 +84,10 @@ public class ProductController{
 	 * @throws IOException
 	 */
 	@RequestMapping("getDocList")
-	public List<Product> searchByName(String name) throws IOException {
-		String index = "db-product";
-		String type = "product";
+	public List<Product> searchByName(Map<String, Object> param) throws IOException {
+		String index = (String)param.get("index");
+		String type = (String)param.get("type");
+		String name = (String)param.get("name");
 		List<Product> list = productService.searchByName(index, type, name);
 		return list;
 	}
