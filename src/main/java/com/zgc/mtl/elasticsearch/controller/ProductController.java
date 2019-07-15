@@ -117,6 +117,8 @@ public class ProductController{
 	
 	/**
 	 * 删除
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping("delete")
