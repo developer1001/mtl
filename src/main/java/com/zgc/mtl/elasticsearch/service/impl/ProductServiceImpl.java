@@ -1,15 +1,18 @@
 package com.zgc.mtl.elasticsearch.service.impl;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.elasticsearch.action.DocWriteResponse.Result;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
-import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -26,6 +29,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -71,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
 		if (!existsIndex(index)) {
 			CreateIndexRequest request = new CreateIndexRequest(index);
 			CreateIndexResponse createIndexResponse = client.indices().create(request,RequestOptions.DEFAULT);
-			System.out.println("创建索引: " + JSON.toJSONString(createIndexResponse));
+			logger.info("创建索引:{},创建结果：{}", index, JSONObject.toJSONString(createIndexResponse));
 		}
 	}
 	
@@ -86,6 +90,7 @@ public class ProductServiceImpl implements ProductService {
 		request.indices(index);
 		boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
 		System.out.println("存在索引？: " + exists);
+		logger.info("索引：{}存在？{}",index, exists);
 		return exists;
 	}
 	
@@ -93,27 +98,30 @@ public class ProductServiceImpl implements ProductService {
 	 * 判断库中此产品记录是否存在
 	 * @param index
 	 * @param type
-	 * @param product
+	 * @param itemId
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean hasProduct(String index, String type, Product product) throws IOException {
-		GetRequest getRequest = new GetRequest(index, type, product.getProductId());
+	public boolean hasRecord(String index, String type, String itemId) throws IOException {
+		GetRequest getRequest = new GetRequest(index, type, itemId);
 		getRequest.fetchSourceContext(new FetchSourceContext(false));
 		getRequest.storedFields("_none_");
 		boolean exists = client.exists(getRequest, RequestOptions.DEFAULT);
-		System.out.println("本产品已存在？: " + exists);
+		logger.info("id为{}的文档，已存在？: {}", exists);
 		return exists;
 	}
 	
-	/**
-	 * 增加记录
-	 * @param index
-	 * @param type
-	 * @param product
-	 * @throws IOException
-	 */
-	public Object add(String index, String type, Product product) throws IOException {
+	public Object insert(BulkProduct param) throws IOException {
+		if(param.getProducts() == null) {
+			return "未提供文档数据，无法保存新文档";
+		}
+		String index = param.getIndex();
+		String type = param.getType();
+		//没有索引先创建索引
+		createIndex(index);
+		Product product = param.getProducts().get(0);
+		product.setProductId(redisTool.generateSeq("mtl-es-productId","productId",  20));
+		product.setLaunchDate(new Date());
 		IndexRequest indexRequest = new IndexRequest(index, type, product.getProductId());
 		indexRequest.source(JSONObject.toJSONString(product), XContentType.JSON);
 		IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
@@ -137,22 +145,55 @@ public class ProductServiceImpl implements ProductService {
 		return parseObject;
 	}
  
-	/**
-	 * 模糊搜索
-	 * @param index
-	 * @param type
-	 * @param name
-	 * @throws IOException
-	 */
-	public List<Product> searchByName(String index, String type, String name) throws IOException {
+	public List<Product> searchList(Map<String, Object> param) throws Exception {
+		String index = (String)param.get("index");
+		String type = (String)param.get("type");
+		int from =  param.get("pageNo") == null ? 0 : ((Integer.parseInt(param.get("pageNo").toString())-1) * 10);
+		int size = param.get("pageSize") == null ? 10 :  Integer.parseInt(param.get("pageSize").toString());
 		BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
-		boolBuilder.must(QueryBuilders.matchQuery("name", name)); // 这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
-		// boolBuilder.must(QueryBuilders.matchQuery("id", tests.getId().toString()));
+//		boolBuilder.must(QueryBuilders.matchQuery("name", name)); // 这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
+		//普通条件，condition下是一个map集合
+		if(param.get("condition") != null) {
+			Map<String,String> conditions = (Map<String, String>) param.get("condition");
+			Set<String> keySet = conditions.keySet();
+			if(keySet != null) {
+				for(String key : keySet) {
+					boolBuilder.must(QueryBuilders.matchQuery(key, conditions.get(key))); 
+				}
+			}
+		}
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		//范围条件，range下是一个map集合
+		if(param.get("range") != null) {
+			Map<String,Object> range = (Map<String, Object>) param.get("range");
+			//时间范围的设定
+			Map<String,String> date = (Map<String, String>) range.get("date");
+			if(date != null) {
+				String dateFrom = date.get("from");
+				String dateTo = date.get("to");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				RangeQueryBuilder rangequerybuilder = QueryBuilders
+						.rangeQuery("launchDate")
+						.from(sdf.parse(dateFrom).getTime()).to(sdf.parse(dateTo).getTime());
+//				sourceBuilder.query(rangequerybuilder);
+				boolBuilder.must(rangequerybuilder); 
+			}
+			//库存量
+			Map<String, Integer> stock = (Map<String, Integer>) range.get("stock");
+			if(stock != null) {
+				Integer stockFrom = stock.get("from");
+				Integer stockTo = stock.get("to");
+//				Date dateFrom = sdf.parse(date.get("dateRange")); 
+				RangeQueryBuilder rangequerybuilder1 = QueryBuilders.rangeQuery("stock")
+						.from(stockFrom).to(stockTo);
+				boolBuilder.must(rangequerybuilder1); 
+			}
+		}
+		//排序条件，order下是一个map集合
 		sourceBuilder.query(boolBuilder);
-		sourceBuilder.from(0);
-		sourceBuilder.size(100); // 获取记录数，默认10
-		sourceBuilder.fetchSource(new String[] {"name", "productId", "category", "brand", "price", "stock" },
+		sourceBuilder.from(from);
+		sourceBuilder.size(size); // 获取记录数，默认10
+		sourceBuilder.fetchSource(new String[] {"name", "productId", "category", "brand", "price", "stock", "launchDate"},
 				new String[] {}); // 第一个是获取字段，第二个是过滤的字段，默认获取全部
 		SearchRequest searchRequest = new SearchRequest(index);
 		searchRequest.types(type);
@@ -179,8 +220,18 @@ public class ProductServiceImpl implements ProductService {
 	 * @return 
 	 * @throws IOException
 	 */
-	public Object update(String index, String type, Product product) throws IOException {
-		product.setName(product.getName() + "updated");
+	public Object update(BulkProduct param) throws IOException {
+		if(param.getProducts() == null) {
+			return "需更新的文档数据未提供";
+		}
+		Product product = param.getProducts().get(0);
+		String index = (String)param.getIndex();
+		String type = (String)param.getType();
+		Product search = this.get(index, type, product.getProductId());
+		if(search == null) {
+			return "文档已不存在，请勿更新";
+		}
+//		product.setLaunchDate(new Date());
 		UpdateRequest request = new UpdateRequest(index, type, product.getProductId());
 		request.doc(JSON.toJSONString(product), XContentType.JSON);
 		UpdateResponse updateResponse = client.update(request, RequestOptions.DEFAULT);
@@ -216,6 +267,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		for(Product p : products) {
 			p.setProductId(redisTool.generateSeq("mtl-es-productId","productId",  20));
+			p.setLaunchDate(new Date());
 		}
 		for (int i = 0; i < products.size(); i++) {
 			Product product = products.get(i);
@@ -240,6 +292,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		for (int i = 0; i < products.size(); i++) {
 			Product product = products.get(i);
+//			product.setLaunchDate(new Date());
 			UpdateRequest updateRequest = new UpdateRequest(param.getIndex(), param.getType(), product.getProductId());
 			updateRequest.doc(JSONObject.toJSONString(product), XContentType.JSON);
 			bulkUpdateRequest.add(updateRequest);

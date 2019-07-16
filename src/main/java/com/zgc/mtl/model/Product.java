@@ -2,11 +2,10 @@ package com.zgc.mtl.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-
-import com.zgc.mtl.common.util.RedisTool;
 /**
  * 产品 ,elasticsearch测试用
  * @date 2019-07-10 17:13:10
@@ -19,13 +18,35 @@ public class Product implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 8683197073221330402L;
+	/**
+	 * 产品编号 
+	 */
 	@Id
 	private String productId;
+	/**
+	 * 产品名称
+	 */
 	private String name;
+	/**
+	 * 分类
+	 */
 	private String category;
+	/**
+	 * 品牌
+	 */
 	private String brand;
+	/**
+	 * 价格
+	 */
 	private BigDecimal price;
+	/**
+	 * 库存
+	 */
 	private Integer stock;
+	/**
+	 * 上市日期
+	 */
+	private Date launchDate;
 	public String getName() {
 		return name;
 	}
@@ -62,10 +83,17 @@ public class Product implements Serializable {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
+	
+	public Date getLaunchDate() {
+		return launchDate;
+	}
+	public void setLaunchDate(Date launchDate) {
+		this.launchDate = launchDate;
+	}
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", name=" + name + ", category=" + category + ", brand=" + brand
-				+ ", price=" + price + ", stock=" + stock + "]";
+				+ ", price=" + price + ", stock=" + stock + ", launchDate=" + launchDate + "]";
 	}
 	
 }

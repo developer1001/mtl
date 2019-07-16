@@ -1,10 +1,8 @@
 package com.zgc.mtl.elasticsearch.controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,103 +26,79 @@ public class ProductController{
 	
 	/**
 	 * 新增一个记录到es中
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping("insert")
-	public Object add(BulkProduct param) throws IOException {
-		String index = "db-product";
-		String type = "product";
-		//没有索引先创建索引
-		productService.createIndex(index);
-		Product product = new Product();
-		product.setBrand("卫龙");
-		product.setCategory("面制食品");
-		product.setName("亲嘴烧");
-		product.setProductId(UUID.randomUUID().toString());
-		product.setPrice(new BigDecimal(2));
-		product.setStock(12652);
-		Object add = productService.add(index, type, product);
+	public Object insert(@RequestBody BulkProduct param) throws IOException {
+		Object add = productService.insert(param);
 		return add;
 	}
 	
 	/**
-	 * 检验某产品是否存在
+	 * 检验文档是否存在
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping("hasRecord")
-	public boolean hasRecord() throws IOException {
-		String index = "db-product";
-		String type = "product";
-		Product product = new Product();
-		product.setBrand("卫龙");
-		product.setCategory("面制食品");
-		product.setName("亲嘴烧");
-		product.setProductId("565232558161");
-		product.setPrice(new BigDecimal(2));
-		product.setStock(12652);
-		boolean hasProduct = productService.hasProduct(index, type, product);
+	public boolean hasRecord(@RequestBody Map<String, Object> param) throws IOException {
+		String index = (String)param.get("index");
+		String type = (String)param.get("type");
+		String id = (String)param.get("itemId");
+		boolean hasProduct = productService.hasRecord(index, type, id);
 		return hasProduct;
 	}
 	
 	/**
-	 * 查询
+	 * 根据id查询某个文档是否存在
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("getDoc")
-	public Product selectByPrimarykey(String id) throws IOException {
-		String index = "db-product";
-		String type = "product";
+	@RequestMapping("search")
+	public Product selectByPrimarykey(@RequestBody Map<String, Object> param) throws IOException {
+		String index = (String)param.get("index");
+		String type = (String)param.get("type");
+		String id = (String)param.get("itemId");
 		Product product = productService.get(index, type, id);
 		return product;
 	}
 	
 	/**
-	 * 根据名字模糊搜索
-	 * @param name
+	 * 条件模糊搜索,返回多个匹配结果
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("getDocList")
-	public List<Product> searchByName(Map<String, Object> param) throws IOException {
-		String index = (String)param.get("index");
-		String type = (String)param.get("type");
-		String name = (String)param.get("name");
-		List<Product> list = productService.searchByName(index, type, name);
+	@RequestMapping("searchList")
+	public List<Product> searchList(@RequestBody Map<String, Object> param) throws Exception {
+		List<Product> list = productService.searchList(param);
 		return list;
 	}
 	
 	/**
-	 * 更新
+	 * 更新文档
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping("update")
-	public Object update() throws IOException {
-		String productId = "565232558161";
-		Product search = selectByPrimarykey(productId);
-		if(search == null) {
-			return "文档已不存在，请勿更新";
-		}
-		String index = "db-product";
-		String type = "product";
-		Product product = new Product();
-		product.setBrand("卫龙");
-		product.setCategory("面制食品");
-		product.setName("亲嘴烧");
-		product.setProductId(productId);
-		product.setPrice(new BigDecimal(2));
-		product.setStock(12652);
-		Object result = productService.update(index, type, product);
+	public Object update(@RequestBody BulkProduct param) throws IOException {
+		Object result = productService.update(param);
 		return result;
 	}
 	
 	/**
-	 * 删除
+	 * 删除一个文档
 	 * @param param
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping("delete")
 	public Object delete(@RequestBody Map<String, String> param) throws IOException {
-		Object result = productService.delete(param.get("index"), param.get("type"), param.get("productId"));
+		Object result = productService.delete(param.get("index"), param.get("type"), param.get("itemId"));
 		return result;
 	}
 	

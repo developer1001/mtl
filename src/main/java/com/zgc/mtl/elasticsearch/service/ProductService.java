@@ -2,6 +2,7 @@ package com.zgc.mtl.elasticsearch.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 
@@ -23,22 +24,21 @@ public interface ProductService {
 	
 	/**
 	 * 判断库中此产品记录是否存在
-	 * @param index
-	 * @param type
-	 * @param product
+	 * @param index 索引
+	 * @param type 类型
+	 * @param itemId id
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean hasProduct(String index, String type, Product product) throws IOException;
+	public boolean hasRecord(String index, String type, String itemId) throws IOException;
 	
 	/**
 	 * 增加记录
-	 * @param index
-	 * @param type
-	 * @param tests
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
-	Object add(String index, String type, Product product) throws IOException;
+	Object insert(BulkProduct param) throws IOException;
 	
 	/**
 	 * 获取记录信息
@@ -51,21 +51,19 @@ public interface ProductService {
 	
 	/**
 	 * 更新记录信息
-	 * @param index
-	 * @param type
-	 * @param product
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
-	Object update(String index, String type, Product product) throws IOException;
+	Object update(BulkProduct param) throws IOException;
 	
 	/**
-	 * 搜索
-	 * @param index
-	 * @param type
-	 * @param name
+	 * 条件模糊搜索,返回多个匹配结果
+	 * @param param
+	 * @return
 	 * @throws IOException
 	 */
-	public List<Product> searchByName(String index, String type, String name) throws IOException;
+	public List<Product> searchList(Map<String, Object> param) throws Exception;
 	
 	
 	/**
