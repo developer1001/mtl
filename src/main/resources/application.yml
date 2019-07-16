@@ -8,6 +8,9 @@ server:
 spring:
   application:
     name: mtl
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   data:
     sst:
       uri: http://127.0.0.1:9200
