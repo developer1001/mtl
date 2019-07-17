@@ -1,6 +1,7 @@
 package com.zgc.mtl.elasticsearch.service.impl;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,12 +29,18 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,51 +157,21 @@ public class ProductServiceImpl implements ProductService {
 		String type = (String)param.get("type");
 		int from =  param.get("pageNo") == null ? 0 : ((Integer.parseInt(param.get("pageNo").toString())-1) * 10);
 		int size = param.get("pageSize") == null ? 10 :  Integer.parseInt(param.get("pageSize").toString());
-		BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
-//		boolBuilder.must(QueryBuilders.matchQuery("name", name)); // 这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
-		//普通条件，condition下是一个map集合
-		if(param.get("condition") != null) {
-			Map<String,String> conditions = (Map<String, String>) param.get("condition");
-			Set<String> keySet = conditions.keySet();
-			if(keySet != null) {
-				for(String key : keySet) {
-					boolBuilder.must(QueryBuilders.matchQuery(key, conditions.get(key))); 
-				}
-			}
-		}
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-		//范围条件，range下是一个map集合
-		if(param.get("range") != null) {
-			Map<String,Object> range = (Map<String, Object>) param.get("range");
-			//时间范围的设定
-			Map<String,String> date = (Map<String, String>) range.get("date");
-			if(date != null) {
-				String dateFrom = date.get("from");
-				String dateTo = date.get("to");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				RangeQueryBuilder rangequerybuilder = QueryBuilders
-						.rangeQuery("launchDate")
-						.from(sdf.parse(dateFrom).getTime()).to(sdf.parse(dateTo).getTime());
-//				sourceBuilder.query(rangequerybuilder);
-				boolBuilder.must(rangequerybuilder); 
-			}
-			//库存量
-			Map<String, Integer> stock = (Map<String, Integer>) range.get("stock");
-			if(stock != null) {
-				Integer stockFrom = stock.get("from");
-				Integer stockTo = stock.get("to");
-//				Date dateFrom = sdf.parse(date.get("dateRange")); 
-				RangeQueryBuilder rangequerybuilder1 = QueryBuilders.rangeQuery("stock")
-						.from(stockFrom).to(stockTo);
-				boolBuilder.must(rangequerybuilder1); 
+		//查询条件
+		BoolQueryBuilder boolBuilder = this.productBoolQuery(param);
+		sourceBuilder.query(boolBuilder);
+		//排序条件
+		List<SortBuilder> orderList = this.productSort(param);
+		if(orderList.size() > 0) {
+			for(SortBuilder sortBuilder : orderList) {
+				sourceBuilder.sort(sortBuilder);
 			}
 		}
-		//排序条件，order下是一个map集合
-		sourceBuilder.query(boolBuilder);
 		sourceBuilder.from(from);
 		sourceBuilder.size(size); // 获取记录数，默认10
-		sourceBuilder.fetchSource(new String[] {"name", "productId", "category", "brand", "price", "stock", "launchDate"},
-				new String[] {}); // 第一个是获取字段，第二个是过滤的字段，默认获取全部
+//		sourceBuilder.fetchSource(new String[] {"name", "productId", "category", "brand", "price", "stock", "launchDate"},
+//				new String[] {}); // 第一个是获取字段，第二个是过滤的字段，默认获取全部
 		SearchRequest searchRequest = new SearchRequest(index);
 		searchRequest.types(type);
 		searchRequest.source(sourceBuilder);
@@ -359,4 +336,88 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.search(searchQuery);
 	}
 
+	/**
+	 * 字段匹配
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	private BoolQueryBuilder productBoolQuery(Map<String, Object> param) throws Exception {
+		BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+//		boolBuilder.must(QueryBuilders.matchQuery("name", name)); // 这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
+		//普通条件，condition下是一个map集合
+		if(param.get("condition") != null) {
+			Map<String,Object> conditions = (Map<String, Object>) param.get("condition");
+			Set<String> keySet = conditions.keySet();
+			if(keySet.size() > 0) {
+				for(String key : keySet) {
+					boolBuilder.must(QueryBuilders.matchQuery(key, conditions.get(key))); 
+				}
+			}
+		}
+		//范围条件，range下是一个map集合
+		if(param.get("range") != null) {
+			Map<String,Object> range = (Map<String, Object>) param.get("range");
+			Set<String> rangeKeys = range.keySet();
+			if(rangeKeys.size() > 0) {
+				for(String key : rangeKeys) {
+					if(key.equals("date")) {
+						//时间范围的设定
+						Map<String,String> date = (Map<String, String>) range.get("date");
+						if(date != null) {
+							String dateFrom = date.get("from");
+							String dateTo = date.get("to");
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							RangeQueryBuilder rangequerybuilder = QueryBuilders
+									.rangeQuery("launchDate")
+									.from(sdf.parse(dateFrom).getTime()).to(sdf.parse(dateTo).getTime());
+							boolBuilder.must(rangequerybuilder); 
+						}
+					}
+					else {
+						Map<String, Object> stock = (Map<String, Object>) range.get(key);
+						if(stock != null) {
+							Object stockFrom = stock.get("from");
+							Object stockTo = stock.get("to");
+							RangeQueryBuilder rangequerybuilder1 = QueryBuilders.rangeQuery(key)
+									.from(stockFrom).to(stockTo);
+							boolBuilder.must(rangequerybuilder1); 
+						}
+					}
+				}
+			}
+		}
+		return boolBuilder;
+	}
+	
+	/**
+	 * 字段排序
+	 * @param param
+	 * @return
+	 */
+	private List<SortBuilder> productSort(Map<String, Object> param) {
+		//排序条件，order下是一个map集合
+		List<SortBuilder> sortList = new ArrayList<>();
+		Map<String,Object> orders = (Map<String, Object>) param.get("order");
+		if(orders != null) {
+			Set<String> keySet = orders.keySet();
+			if(keySet.size() > 0) {
+				//_score匹配度放在第一位，等级最高，默认倒叙排列
+				ScoreSortBuilder scoreSort = SortBuilders.scoreSort();
+				sortList.add(scoreSort);
+				//对其他的字段再排序
+				for(String key : keySet) {
+					if(orders.get(key).equals("DESC")) {
+						FieldSortBuilder sortBuilder = SortBuilders.fieldSort(key).order(SortOrder.DESC);
+						sortList.add(sortBuilder);
+					}
+					else {
+						FieldSortBuilder sortBuilder = SortBuilders.fieldSort(key).order(SortOrder.ASC);
+						sortList.add(sortBuilder);
+					}
+				}
+			}
+		}
+		return sortList;
+	}
 }
