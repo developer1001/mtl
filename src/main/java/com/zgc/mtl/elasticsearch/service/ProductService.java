@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 
 import com.zgc.mtl.elasticsearch.request.BulkProduct;
+import com.zgc.mtl.elasticsearch.response.ProductDto;
 import com.zgc.mtl.model.Product;
 
 /**
@@ -63,7 +64,7 @@ public interface ProductService {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<Product> searchList(Map<String, Object> param) throws Exception;
+	public List<ProductDto> searchList(Map<String, Object> param) throws Exception;
 	
 	
 	/**

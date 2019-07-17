@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zgc.mtl.elasticsearch.request.BulkProduct;
+import com.zgc.mtl.elasticsearch.response.ProductDto;
 import com.zgc.mtl.elasticsearch.service.ProductService;
 import com.zgc.mtl.model.Product;
 
@@ -73,8 +74,8 @@ public class ProductController{
 	 * @throws IOException
 	 */
 	@RequestMapping("searchList")
-	public List<Product> searchList(@RequestBody Map<String, Object> param) throws Exception {
-		List<Product> list = productService.searchList(param);
+	public List<ProductDto> searchList(@RequestBody Map<String, Object> param) throws Exception {
+		List<ProductDto> list = productService.searchList(param);
 		return list;
 	}
 	

@@ -1,7 +1,6 @@
 package com.zgc.mtl.elasticsearch.service.impl;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,16 +25,18 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
@@ -55,6 +56,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zgc.mtl.common.util.RedisTool;
 import com.zgc.mtl.elasticsearch.dao.ProductRepository;
 import com.zgc.mtl.elasticsearch.request.BulkProduct;
+import com.zgc.mtl.elasticsearch.response.ProductDto;
 import com.zgc.mtl.elasticsearch.service.ProductService;
 import com.zgc.mtl.model.Product;
 /**
@@ -152,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
 		return parseObject;
 	}
  
-	public List<Product> searchList(Map<String, Object> param) throws Exception {
+	public List<ProductDto> searchList(Map<String, Object> param) throws Exception {
 		String index = (String)param.get("index");
 		String type = (String)param.get("type");
 		int from =  param.get("pageNo") == null ? 0 : ((Integer.parseInt(param.get("pageNo").toString())-1) * 10);
@@ -168,6 +170,15 @@ public class ProductServiceImpl implements ProductService {
 				sourceBuilder.sort(sortBuilder);
 			}
 		}
+		//是否高亮
+		boolean isHighLight = param.get("highLightName") != null;
+		if(isHighLight) {
+			HighlightBuilder highlightBuilder = new HighlightBuilder().field("name").requireFieldMatch(true);
+			Map<String, String> highLightMap  = (Map<String, String>) param.get("highLightName");
+			highlightBuilder.preTags(highLightMap.get("prefix"));
+			highlightBuilder.postTags(highLightMap.get("suffix"));
+			sourceBuilder.highlighter(highlightBuilder);
+		}
 		sourceBuilder.from(from);
 		sourceBuilder.size(size); // 获取记录数，默认10
 //		sourceBuilder.fetchSource(new String[] {"name", "productId", "category", "brand", "price", "stock", "launchDate"},
@@ -178,11 +189,23 @@ public class ProductServiceImpl implements ProductService {
 		SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
 		SearchHits hits = response.getHits();
 		SearchHit[] searchHits = hits.getHits();
-		List<Product> list = new ArrayList<>();
+		List<ProductDto> list = new ArrayList<>();
 		if(searchHits != null) {
 			for (SearchHit hit : searchHits) {
 				String sourceAsString = hit.getSourceAsString();
-				Product parseObject = JSONObject.parseObject(sourceAsString, Product.class);
+				ProductDto parseObject = JSONObject.parseObject(sourceAsString, ProductDto.class);
+				if(isHighLight) {
+					Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+					HighlightField highlightNameField = highlightFields.get("name");
+					if(highlightNameField != null) {
+						Text[] fragments = highlightNameField.fragments();
+						String highlightName = "";
+						for(Text text : fragments) {
+							highlightName += text;
+						}
+						parseObject.setHighLightName(highlightName);
+					}
+				}
 				list.add(parseObject);
 			}
 		}

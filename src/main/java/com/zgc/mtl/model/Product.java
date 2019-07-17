@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 /**
  * 产品 ,elasticsearch测试用
  * @date 2019-07-10 17:13:10
@@ -26,6 +28,7 @@ public class Product implements Serializable {
 	/**
 	 * 产品名称
 	 */
+	@Field(store = true, analyzer = "ik", type = FieldType.Keyword, searchAnalyzer = "ik")
 	private String name;
 	/**
 	 * 分类
