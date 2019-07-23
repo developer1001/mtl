@@ -17,14 +17,15 @@ public class RedisTool {
 	private  StringRedisTemplate stringRedisTemplate;
 	/**
 	 * 生成指定位数的纯数字字符串,位数不够前面补0；超出位数，保留所有位数
-	 * @param key 键的名字
+	 * @param enu 字符串枚举类，从其中取值
 	 * @param length 序列的长度
 	 * @return 数字自增为1的纯数字字符串
 	 */
-	public  String generateSeq(String key, int length) {
+	public  String generateSeq(StrEnum enu, int length) {
 		if(length <= 0) {
 			return "";
 		}
+		String key = enu.getStr();
 		Long num = stringRedisTemplate.opsForValue().increment(key, 1);
 		String numStr = num + "";
 		if(numStr.length() >= length) {
@@ -43,7 +44,7 @@ public class RedisTool {
 	
 	/**
 	 * 生成指定位数并指定前缀的字符串，若位数不够，中间补0，超出位数，保留所有位数
-	 * @param key 键的名字
+	 * @param enu 字符串枚举类，从其中取值
 	 * @param prefix 字符串前缀
 	 * @param length 序列的长度
 	 * @return 指定前缀的字符串
