@@ -66,6 +66,13 @@ public interface ProductService {
 	 */
 	public List<ProductDto> searchList(Map<String, Object> param) throws Exception;
 	
+	/**
+	 * 统计符合条件的条目总数
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	Object count(Map<String, Object> param) throws Exception;
 	
 	/**
 	 * 删除记录

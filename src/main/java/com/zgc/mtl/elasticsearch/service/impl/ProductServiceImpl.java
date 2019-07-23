@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -210,6 +211,25 @@ public class ProductServiceImpl implements ProductService {
 			}
 		}
 		return list;
+	}
+	
+	public Object count(Map<String, Object> param) throws Exception {
+		String index = (String)param.get("index");
+		String type = (String)param.get("type");
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		//查询条件
+		BoolQueryBuilder boolBuilder = this.productBoolQuery(param);
+		sourceBuilder.query(boolBuilder);
+		SearchRequest searchRequest = new SearchRequest(index);
+		searchRequest.types(type);
+		searchRequest.source(sourceBuilder);
+		SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
+		SearchHits hits = response.getHits();
+		SearchHit[] searchHits = hits.getHits();
+		long count = searchHits == null ? 0 : searchHits.length;
+		Map<String,Object> result = new HashMap<String, Object>();
+		result.put("count", count);
+		return result;
 	}
 	
 	/**

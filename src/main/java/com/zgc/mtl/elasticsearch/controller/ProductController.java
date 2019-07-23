@@ -79,6 +79,11 @@ public class ProductController{
 		return list;
 	}
 	
+	@RequestMapping("count")
+	public Object count(@RequestBody Map<String, Object> param) throws Exception {
+		Object count = productService.count(param);
+		return count;
+	}
 	/**
 	 * 更新文档
 	 * @param param
