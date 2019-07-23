@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zgc.mtl.common.enu.Week;
 import com.zgc.mtl.common.util.RedisTool;
 import com.zgc.mtl.model.Person;
 import com.zgc.mtl.service.ISysUserService;
@@ -99,4 +100,9 @@ public class SpringBootTestController {
 
 	}
 	
+	@RequestMapping("week")
+	public String getWeek(Week day) {
+		String day2 = Week.getDay(day);
+		return day2;
+	}
 }

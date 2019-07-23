@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zgc.mtl.common.enu.StrEnum;
 /**
  * redis工具类
  * @date 2019-07-09 16:56:44
@@ -47,7 +48,8 @@ public class RedisTool {
 	 * @param length 序列的长度
 	 * @return 指定前缀的字符串
 	 */
-	public  String generateSeq(String key, String prefix, int length) {
+	public  String generateSeq(StrEnum enu, String prefix, int length) {
+		String key = enu.getStr();
 		if(length <= 0) {
 			return "";
 		}

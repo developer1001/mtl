@@ -103,18 +103,36 @@ public class ProductController{
 		return result;
 	}
 	
+	/**
+	 * 批量插入
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("bulkInsert")
 	public Object bulkInsert(@RequestBody BulkProduct param) throws IOException {
 		Object result = productService.bulkInsert(param);
 		return result;
 	}
 	
+	/**
+	 * 批量更新
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("bulkUpdate")
 	public Object bulkUpdate(@RequestBody BulkProduct param) throws IOException {
 		Object result = productService.bulkUpdate(param);
 		return result;
 	}
 	
+	/**
+	 * 批量删除
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("bulkDelete")
 	public Object bulkDelete(@RequestBody BulkProduct param) throws IOException {
 		Object result = productService.bulkDelete(param);

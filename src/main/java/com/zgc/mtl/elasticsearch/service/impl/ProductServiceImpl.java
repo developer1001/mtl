@@ -53,6 +53,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zgc.mtl.common.enu.StrEnum;
 import com.zgc.mtl.common.util.RedisTool;
 import com.zgc.mtl.elasticsearch.dao.ProductRepository;
 import com.zgc.mtl.elasticsearch.request.BulkProduct;
@@ -128,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
 		//没有索引先创建索引
 		createIndex(index);
 		Product product = param.getProducts().get(0);
-		product.setProductId(redisTool.generateSeq("mtl-es-productId","productId",  20));
+		product.setProductId(redisTool.generateSeq(StrEnum.PRODUCTID,"productId",  20));
 		product.setLaunchDate(new Date());
 		IndexRequest indexRequest = new IndexRequest(index, type, product.getProductId());
 		indexRequest.source(JSONObject.toJSONString(product), XContentType.JSON);
@@ -263,7 +264,7 @@ public class ProductServiceImpl implements ProductService {
 			return "数据不全";
 		}
 		for(Product p : products) {
-			p.setProductId(redisTool.generateSeq("mtl-es-productId","productId",  20));
+			p.setProductId(redisTool.generateSeq(StrEnum.PRODUCTID,"productId",  20));
 			p.setLaunchDate(new Date());
 		}
 		//没有索引先创建索引
