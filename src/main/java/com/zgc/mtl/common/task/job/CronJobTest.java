@@ -11,12 +11,12 @@ import org.quartz.impl.StdSchedulerFactory;
 
 public class CronJobTest {
 	public static void main(String[] args) throws SchedulerException {
-		JobDetail detail = JobBuilder.newJob(MyJob.class).withIdentity("CronJob").build();
-		CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("cronTrigger").
-				withSchedule(CronScheduleBuilder.cronSchedule("0 30/5 * * * ? *")).build();
-		StdSchedulerFactory factory = new StdSchedulerFactory();
-		Scheduler scheduler = factory.getScheduler();
-		scheduler.scheduleJob(detail, cronTrigger);
-		scheduler.start();
+//		JobDetail detail = JobBuilder.newJob(MyJob.class).withIdentity("CronJob").build();
+//		CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("cronTrigger").
+//				withSchedule(CronScheduleBuilder.cronSchedule("0 30/5 * * * ? *")).build();
+//		StdSchedulerFactory factory = new StdSchedulerFactory();
+//		Scheduler scheduler = factory.getScheduler();
+//		scheduler.scheduleJob(detail, cronTrigger);
+//		scheduler.start();
 	}
 }

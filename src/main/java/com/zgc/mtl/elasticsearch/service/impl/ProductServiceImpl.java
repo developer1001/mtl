@@ -98,7 +98,6 @@ public class ProductServiceImpl implements ProductService {
 		GetIndexRequest request = new GetIndexRequest();
 		request.indices(index);
 		boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
-		System.out.println("存在索引？: " + exists);
 		logger.info("索引：{}存在？{}",index, exists);
 		return exists;
 	}
@@ -259,8 +258,6 @@ public class ProductServiceImpl implements ProductService {
 	 * @throws IOException
 	 */
 	public Object bulkInsert(BulkProduct param) throws IOException {
-		// 批量增加
-		BulkRequest bulkAddRequest = new BulkRequest();
 		List<Product> products = param.getProducts();
 		if(products == null) {
 			return "数据不全";
@@ -269,6 +266,10 @@ public class ProductServiceImpl implements ProductService {
 			p.setProductId(redisTool.generateSeq("mtl-es-productId","productId",  20));
 			p.setLaunchDate(new Date());
 		}
+		//没有索引先创建索引
+		createIndex(param.getIndex());
+		// 批量增加
+		BulkRequest bulkAddRequest = new BulkRequest();
 		for (int i = 0; i < products.size(); i++) {
 			Product product = products.get(i);
 			IndexRequest indexRequest = new IndexRequest(param.getIndex(), param.getType(), product.getProductId());
@@ -367,14 +368,23 @@ public class ProductServiceImpl implements ProductService {
 	 */
 	private BoolQueryBuilder productBoolQuery(Map<String, Object> param) throws Exception {
 		BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
-//		boolBuilder.must(QueryBuilders.matchQuery("name", name)); // 这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
-		//普通条件，condition下是一个map集合
-		if(param.get("condition") != null) {
-			Map<String,Object> conditions = (Map<String, Object>) param.get("condition");
+		//blurry下是一个map集合，支持模糊搜索，搜索名称等时，可以模糊匹配出多个相似的名称
+		if(param.get("blurry") != null) {
+			Map<String,Object> conditions = (Map<String, Object>) param.get("blurry");
 			Set<String> keySet = conditions.keySet();
 			if(keySet.size() > 0) {
 				for(String key : keySet) {
 					boolBuilder.must(QueryBuilders.matchQuery(key, conditions.get(key))); 
+				}
+			}
+		}
+		//exact下是一个map集合，支持精确搜索，100%全内容匹配，只能精确匹配出一个
+		if(param.get("exact") != null) {
+			Map<String,Object> conditions = (Map<String, Object>) param.get("exact");
+			Set<String> keySet = conditions.keySet();
+			if(keySet.size() > 0) {
+				for(String key : keySet) {
+					boolBuilder.must(QueryBuilders.termQuery(key, conditions.get(key))); 
 				}
 			}
 		}
@@ -430,14 +440,14 @@ public class ProductServiceImpl implements ProductService {
 				sortList.add(scoreSort);
 				//对其他的字段再排序
 				for(String key : keySet) {
+					FieldSortBuilder sortBuilder = null;
 					if(orders.get(key).equals("DESC")) {
-						FieldSortBuilder sortBuilder = SortBuilders.fieldSort(key).order(SortOrder.DESC);
-						sortList.add(sortBuilder);
+						sortBuilder = SortBuilders.fieldSort(key).order(SortOrder.DESC);
 					}
 					else {
-						FieldSortBuilder sortBuilder = SortBuilders.fieldSort(key).order(SortOrder.ASC);
-						sortList.add(sortBuilder);
+						sortBuilder = SortBuilders.fieldSort(key).order(SortOrder.ASC);
 					}
+					sortList.add(sortBuilder);
 				}
 			}
 		}

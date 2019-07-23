@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+
+import com.zgc.mtl.model.Product;
 /**
  * 主要用来构建RestHighLevelClient客户端
  * @date 2019-07-12 16:47:15
@@ -29,7 +31,9 @@ public class EsTemplateConfig {
 	}
 	@Bean
 	public ElasticsearchTemplate elasticsearchTemplate(Client client) {
-		return new ElasticsearchTemplate(client);
+		ElasticsearchTemplate elasticsearchTemplate = new ElasticsearchTemplate(client);
+//		elasticsearchTemplate.putMapping(Product.class);
+		return elasticsearchTemplate;
 	}
 
 	@Bean

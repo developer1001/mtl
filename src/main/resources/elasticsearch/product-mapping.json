@@ -1,0 +1,40 @@
+/*  配置mapping示例，
+接口地址：http://localhost:9200/db-product/product/_mapping
+db-product是索引（index）名，product是类型（type）名，_mapping是固定的
+*/
+{
+    "product": {
+        "properties": {
+            "productId": {
+                "type": "keyword"
+            },
+            "name": {
+                "type": "text",
+                "analyzer": "ik_max_word",
+                "search-analyzer": "ik_max_word",
+                "store": true,
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "category": {
+                "type": "keyword"
+            },
+            "brand": {
+                "type": "keyword"
+            },
+            "price": {
+                "type": "float"
+            },
+            "stock": {
+                "type": "integer"
+            },
+            "launchDate": {
+                "type": "date"
+            }
+        }
+    }
+}

@@ -6,14 +6,14 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+//import org.springframework.data.elasticsearch.annotations.Field;
+//import org.springframework.data.elasticsearch.annotations.FieldType;
 /**
  * 产品 ,elasticsearch测试用
  * @date 2019-07-10 17:13:10
  * @author yang
  */
-@Document(indexName="product", type="product")
+@Document(indexName="db-product", type="product")
 public class Product implements Serializable {
 
 	/**
@@ -24,31 +24,37 @@ public class Product implements Serializable {
 	 * 产品编号 
 	 */
 	@Id
+//	@Field(type = FieldType.Keyword)
 	private String productId;
 	/**
 	 * 产品名称
 	 */
-	@Field(store = true, analyzer = "ik", type = FieldType.Keyword, searchAnalyzer = "ik")
+//	@Field(store = true, analyzer = "ik_max_word", type = FieldType.Text, searchAnalyzer = "ik_max_word")
 	private String name;
 	/**
 	 * 分类
 	 */
+//	@Field(type = FieldType.Keyword)
 	private String category;
 	/**
 	 * 品牌
 	 */
+//	@Field(type = FieldType.Keyword,index = false)
 	private String brand;
 	/**
 	 * 价格
 	 */
+//	@Field(type = FieldType.Float)
 	private BigDecimal price;
 	/**
 	 * 库存
 	 */
+//	@Field(type = FieldType.Integer)
 	private Integer stock;
 	/**
 	 * 上市日期
 	 */
+//	@Field(type = FieldType.Date)
 	private Date launchDate;
 	public String getName() {
 		return name;
