@@ -37,12 +37,6 @@ public class ProductController{
 		return add;
 	}
 	
-	@RequestMapping("save")
-	public Object save(@RequestBody BulkProduct param) throws IOException {
-		Object add = productService.save(param.getProducts().get(0));
-		return add;
-	}
-	
 	/**
 	 * 检验文档是否存在
 	 * @param param
