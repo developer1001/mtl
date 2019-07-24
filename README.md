@@ -3,8 +3,9 @@
 ## (my true l)
 
 1. [spring-boot-2.1.6](https://spring.io/projects/spring-boot)  
-  1.1 mybatis  
-  1.2 mysql  
+  1.1 mybatis(mybatis-generator自动生成代码(执行MybatisGenerator.java主方法)和排序...，  
+  pageHelper分页和排序)  
+  1.2 mysql(备份文件：resources/sql)  
   1.3 log4j
 2. 腾讯云音频转文字
 3. quartz 简单示例
