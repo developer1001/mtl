@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageHelper;
 import com.zgc.mtl.common.enu.Week;
 import com.zgc.mtl.common.util.RedisTool;
 import com.zgc.mtl.model.Person;
@@ -50,9 +51,17 @@ public class SpringBootTestController {
 		System.out.println(obj.getId()+ "," + obj.getAge() + "," + obj.getName());
 	}
 	
-	@RequestMapping("methodParam")
-	public void methodParam(String age) {
-		System.out.println("年龄是："+age);
+	/**
+	 * pageHelper使用示例，可以分页加排序
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	@RequestMapping("selectUser")
+	public Object selectUser(int pageNo, int pageSize) {
+		PageHelper.startPage(pageNo, pageSize, "id desc");
+		List<Person> persons = testService.getPersons();
+		return persons;
 	}
 	
 	/**
