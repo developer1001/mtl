@@ -17,7 +17,9 @@ spring:
       hostlist: 127.0.0.1:9200
     elasticsearch:
       #cluster-name: my-application
-      cluster-nodes: 127.0.0.1:9300          
+      cluster-nodes: 127.0.0.1:9300
+    mongodb: 
+      uri: mongodb://localhost:27017/logdb
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
