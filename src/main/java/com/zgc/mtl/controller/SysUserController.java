@@ -1,14 +1,18 @@
 package com.zgc.mtl.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.zgc.mtl.base.model.Json;
 import com.zgc.mtl.common.util.MD5;
-import com.zgc.mtl.common.util.StringUtil;
 import com.zgc.mtl.model.SysUser;
 import com.zgc.mtl.service.ISysUserService;
 /**
@@ -30,7 +34,7 @@ public class SysUserController {
     @ResponseBody
     public Json getUser(String id){
         List<SysUser> list =null;
-		if (StringUtil.isValid(id)){
+		if (StringUtils.isNotBlank(id)){
             SysUser user = userService.findById(Integer.parseInt(id));
             Json json = new Json(true,1,user);
             return json;
@@ -45,7 +49,7 @@ public class SysUserController {
     @RequestMapping("deleteUserById")
     @ResponseBody
     public Json deleteUserById(String id){
-        if (StringUtil.isValid(id)){
+        if (StringUtils.isNotBlank(id)){
         int a =   userService.deleteById(Integer.parseInt(id));
           Json json = new Json();
           if (a == 1){
@@ -97,5 +101,12 @@ public class SysUserController {
     public String toNewPage(){
         //加上前缀和后缀，组成新的url地址，页面跳转
         return "test";
+    }
+    
+    @PostMapping("getUser")
+    @ResponseBody
+    public SysUser getUser(@RequestBody Map<String, String> param) {
+    	SysUser login = userService.login(param.get("loginName"), param.get("password"));
+		return login;
     }
 }

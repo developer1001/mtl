@@ -1,4 +1,4 @@
-package com.zgc.mtl.common.task.job;
+package com.zgc.mtl.common.task.quartz;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;

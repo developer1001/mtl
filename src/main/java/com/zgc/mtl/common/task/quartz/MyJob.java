@@ -1,4 +1,4 @@
-package com.zgc.mtl.common.task.job;
+package com.zgc.mtl.common.task.quartz;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
