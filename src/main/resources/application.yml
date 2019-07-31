@@ -80,7 +80,14 @@ spring:
       # 连接池中的最大空闲连接  
       max-idle: 8 
       # 连接池中的最小空闲连接  
-      min-idle: 0  
+      min-idle: 0
+  mail:
+    host: smtp.qq.com # 邮箱smtp主机
+    port: 587 #端口号
+    username: test@qq.com
+    password: asfajksbrfse  # 这里QQ邮箱开通POP3/SMTP提供的授权码，如果邮箱服务商没有授权码，可以使用密码代替
+    protocol: smtp
+    default-encoding: UTF-8      
 mybatis:
   mapperLocations: classpath*:mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
   configLocation: classpath:mybatis-config.xml
