@@ -14,3 +14,6 @@
 6. druid数据库连接池配置
 7. redis配置和简单方法封装与测试(spring RedisTemplate)
 8. elasticsearch-6.4.3简单配置和使用（nodejs; grunt server; elasticsearch-head-master）
+9. MongoDB
+10. email发送工具类--MailUtil
+11. aliyun sms手机短信息发送工具类--AliSmsUtil(需充值购买ali sms套餐)
