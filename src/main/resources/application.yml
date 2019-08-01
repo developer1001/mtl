@@ -91,3 +91,10 @@ spring:
 mybatis:
   mapperLocations: classpath*:mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
   configLocation: classpath:mybatis-config.xml
+aliyun:
+  sms:
+    accessKeyId: xxx
+    accessSecret: xxx
+    signName: yourSignName
+    templateCode: yourTemplateId
+  
