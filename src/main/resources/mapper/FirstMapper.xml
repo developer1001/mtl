@@ -3,12 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 -->
 <mapper namespace="com.zgc.mtl.dao.FirstDao">
-   	<select id="getAllPersons" resultMap="allPerson">
+	<select id="getAllPersons" resultMap="allPerson">
 		select * from t_person
-	</select>	
+	</select>
 	<resultMap id="allPerson" type="com.zgc.mtl.model.Person">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="age" property="age" />
-    </resultMap>	
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="age" property="age" />
+	</resultMap>
+	<select id="selectById" resultMap="allPerson">
+		select * from t_person where id = #{id}
+	</select>
 </mapper>

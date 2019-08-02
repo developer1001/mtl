@@ -26,4 +26,10 @@ public class TestServiceImpl implements ITestService {
 		return testDao.getAllPersons();
 	}
 
+	@Override
+	public Person selectById(int id) {
+		Person person = testDao.selectById(id);
+		return person;
+	}
+
 }

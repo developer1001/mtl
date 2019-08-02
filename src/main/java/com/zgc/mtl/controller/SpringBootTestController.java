@@ -1,8 +1,6 @@
 package com.zgc.mtl.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,45 +71,20 @@ public class SpringBootTestController {
 		return persons;
 	}
 	
-	/**
-	 * 已废弃，由线程池来处理
-	 * @return
-	 */
-	@RequestMapping("multiTask")
-	@Deprecated
-	public Object multiTask() {
-		Map<String, Object> map = new HashMap<>();
-		map.put("map1", "map1");
-		sysUserService.deleteById(11);
-		new Thread(new MultiTaskTest()).start();
-		return map;
-	}
-	
-	private class MultiTaskTest  implements Runnable {
-		@Override
-		public void run(){
-			try {
-				task();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		private void task() throws InterruptedException {
-			long s = System.currentTimeMillis();
-			System.out.println("开始"+System.currentTimeMillis());
-			Thread.sleep(10000);
-			sysUserService.add(null);
-			System.out.println("结束,耗时："+(System.currentTimeMillis() - s) + "ms");
-
-		}
-
-	}
-	
 	@RequestMapping("week")
 	public String getWeek(Week day) {
 		String day2 = Week.getDay(day);
 		return day2;
+	}
+	
+	/**
+	 * 热部署测试接口
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("devTools")
+	public Object print(int id) {
+		Person user = testService.selectById(id);
+		return user;
 	}
 }

@@ -81,6 +81,14 @@ spring:
       max-idle: 8 
       # 连接池中的最小空闲连接  
       min-idle: 0
+  #热部署配置
+  devtools:
+    restart:
+      enabled: true
+      #设置重启的目录
+      #additional-paths: src/main/java
+      #classpath目录下的WEB-INF文件夹内容修改不重启
+      exclude: WEB-INF/**
   mail:
     host: smtp.qq.com # 邮箱smtp主机
     port: 587 #端口号

@@ -12,4 +12,9 @@ public interface ITestService {
 	 * @return
 	 */
 	List<Person> getPersons(); 
+	/**
+	 * 根据id查找user
+	 * @return
+	 */
+	Person selectById(int id);
 }
