@@ -11,6 +11,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  main:
+    allow-bean-definition-overriding: true
   data:
     sst:
       uri: http://127.0.0.1:9200
@@ -61,6 +63,12 @@ spring:
         login-password: admin
         #启用重置数据功能
         reset-enable: true  
+  jpa:
+    database: MySQL
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update      
   redis: 
     # Redis数据库索引（默认为0）  
     database: 0  
