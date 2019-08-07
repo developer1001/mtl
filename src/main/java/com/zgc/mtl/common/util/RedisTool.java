@@ -94,4 +94,9 @@ public class RedisTool {
 		T t = JSONObject.parseObject(string, clazz);
 		return t;
 	}
+	
+	public Double score(String zsetkey, String key) {
+		Double incrementScore = stringRedisTemplate.opsForZSet().incrementScore(zsetkey, key, 1);
+		return incrementScore;
+	}
 }
