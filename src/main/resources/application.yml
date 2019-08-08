@@ -89,19 +89,18 @@ spring:
       max-idle: 8 
       # 连接池中的最小空闲连接  
       min-idle: 0
-  kkafka:
-    bootstrap-servers: 127.0.0.1:9092
-    consumer:
-      groupId: executor
-      enable-auto-commit: true
-      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
-      valueDserializer: org.apache.kafka.common.serialization.StringDeserializer
+  kafka:
+    bootstrap-servers: 192.168.153.1:9092
     producer:
-      groupId: executor
       keyDeserializer: org.apache.kafka.common.serialization.StringSerializer
       valueDserializer: org.apache.kafka.common.serialization.StringSerializer
       batch-size: 16384
       buffer-memory: 33554432    
+    consumer:
+      group-id: test-consumer-group
+      enable-auto-commit: true
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDserializer: org.apache.kafka.common.serialization.StringDeserializer
   #热部署配置
   devtools:
     restart:

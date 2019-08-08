@@ -19,3 +19,4 @@
 11. aliyun sms手机短信息发送工具类--AliSmsUtil(需充值购买ali sms套餐)
 12. devTools热部署
 13. spring-data-jpa配置和测试
+14. kafka
