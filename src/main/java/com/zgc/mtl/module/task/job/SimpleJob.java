@@ -1,4 +1,4 @@
-package com.zgc.mtl.common.task.job;
+package com.zgc.mtl.module.task.job;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
