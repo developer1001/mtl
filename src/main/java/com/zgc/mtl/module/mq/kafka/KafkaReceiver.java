@@ -10,7 +10,7 @@ import com.zgc.mtl.common.constant.TopicConst;
 public class KafkaReceiver {
 	private static Logger log = LoggerFactory.getLogger(KafkaReceiver.class);
 
-	@KafkaListener(topics = { TopicConst.LOG_TOPIC })
+//	@KafkaListener(topics = { TopicConst.LOG_TOPIC })
 	public void listen(String message) {
 		log.info("------------------接收消息 message =" + message);
 	}

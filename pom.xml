@@ -147,10 +147,6 @@
 			<artifactId>aliyun-java-sdk-core</artifactId>
 			<version>4.1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-		</dependency>
 		<!-- 热部署 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

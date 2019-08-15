@@ -5,8 +5,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -59,13 +64,34 @@ public class PostUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String sendHttpPost(String url, String body) throws Exception {
+	public static String sendJsonHttpPost(String url, String body) throws Exception {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.addHeader("Content-Type", "application/json;charset=utf-8");
 		StringEntity stringEntity = new StringEntity(body);
 		stringEntity.setContentEncoding("UTF-8");
 		httpPost.setEntity(stringEntity);
+		CloseableHttpResponse response = httpClient.execute(httpPost);
+		HttpEntity entity = response.getEntity();
+		String responseContent = EntityUtils.toString(entity, "UTF-8");
+		response.close();
+		httpClient.close();
+		return responseContent;
+	}
+	
+	/**
+	 * 
+	 * @param url请求地址
+	 * @param list 请求参数
+	 * @return
+	 * @throws Exception
+	 */
+	public static String sendHttpPost(String url, List<? extends NameValuePair> list) throws Exception {
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+		UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list);
+		httpPost.setEntity(urlEncodedFormEntity);
 		CloseableHttpResponse response = httpClient.execute(httpPost);
 		HttpEntity entity = response.getEntity();
 		String responseContent = EntityUtils.toString(entity, "UTF-8");
