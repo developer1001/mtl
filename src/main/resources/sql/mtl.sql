@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50522
 File Encoding         : 65001
 
-Date: 2019-07-24 15:56:36
+Date: 2019-08-16 17:39:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,8 +35,34 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 INSERT INTO `sys_user` VALUES ('1', '管理员', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '1');
 INSERT INTO `sys_user` VALUES ('2', '超级管理员', 'superadmin', 'e10adc3949ba59abbe56e057f20f883e', '1');
-INSERT INTO `sys_user` VALUES ('5', '企业1', 'qiye1', 'e10adc3949ba59abbe56e057f20f883e', '1');
+INSERT INTO `sys_user` VALUES ('5', '企业1', '问', 'e10adc3949ba59abbe56e057f20f883e', '1');
 INSERT INTO `sys_user` VALUES ('7', '测试改', 'ceshi11', 'e10adc3949ba59abbe56e057f20f883e', '0');
+
+-- ----------------------------
+-- Table structure for t_customer
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer`;
+CREATE TABLE `t_customer` (
+  `id` varchar(255) NOT NULL,
+  `birthday` datetime DEFAULT NULL,
+  `name` varchar(64) NOT NULL,
+  `phone` varchar(64) DEFAULT NULL,
+  `sex` varchar(1) DEFAULT NULL,
+  `created_by` varchar(64) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `updated_by` varchar(64) DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_customer
+-- ----------------------------
+INSERT INTO `t_customer` VALUES ('402819856c5fd537016c5fd569d20000', null, '129', '14187824329', 'F', 'admin', '2019-08-05 11:31:57', 'admin', '2019-08-05 11:31:57');
+INSERT INTO `t_customer` VALUES ('402819856c5fd537016c5fd56a010001', null, '129', '130690484523203', 'F', 'admin', '2019-08-05 11:31:57', 'admin', '2019-08-05 11:31:57');
+INSERT INTO `t_customer` VALUES ('402819856c5fd537016c5fd56a020002', null, '129', '175634800120650', 'F', 'admin', '2019-08-05 11:31:57', 'admin', '2019-08-05 11:31:57');
+INSERT INTO `t_customer` VALUES ('402819856c5fd537016c5fd56a020003', null, '129', '192225689472118', 'F', 'admin', '2019-08-05 11:31:57', 'admin', '2019-08-05 11:31:57');
+INSERT INTO `t_customer` VALUES ('402819856c5fd537016c5fd56a020004', null, '178', '126681451368906', 'M', 'admin', '2019-08-05 11:31:57', 'admin', '2019-08-05 11:31:57');
 
 -- ----------------------------
 -- Table structure for t_healthy
@@ -49,7 +75,7 @@ CREATE TABLE `t_healthy` (
   `user_id` varchar(20) DEFAULT NULL COMMENT '用户编号',
   `create_date` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='健康指数表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='健康指数表';
 
 -- ----------------------------
 -- Records of t_healthy
