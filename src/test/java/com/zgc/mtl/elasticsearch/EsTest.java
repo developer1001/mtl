@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author yang
  */
 
-import com.zgc.mtl.elasticsearch.service.ProductService;
 import com.zgc.mtl.model.Product;
+import com.zgc.mtl.module.elasticsearch.service.ProductService;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EsTest {

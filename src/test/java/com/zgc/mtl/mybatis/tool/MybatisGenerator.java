@@ -25,7 +25,7 @@ public class MybatisGenerator {
 		boolean overwrite = true;
 
 		// 读取配置文件generatorConfig.xml
-		File configFile = new File("src/main/resources/mybatis-generatorConfig.xml");
+		File configFile = new File("src/main/java/com/zgc/mtl/base/mybatis-generatorConfig.xml");
 
 		ConfigurationParser cp = new ConfigurationParser(warnings);
 		Configuration config = cp.parseConfiguration(configFile);

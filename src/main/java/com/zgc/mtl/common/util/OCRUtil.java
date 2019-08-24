@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -34,7 +32,7 @@ public class OCRUtil {
 	private static String url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic";
 	
 	/**
-	 * cor鉴权认证
+	 * OCR鉴权认证
 	 * @return
 	 * @throws Exception
 	 */
@@ -73,4 +71,8 @@ public class OCRUtil {
 		return ocrJson;
 	}
 	
+	public static void main(String[] args) throws Exception {
+		String fileUrl = "qqqq.jpg";
+		ocr(fileUrl);
+	}
 }

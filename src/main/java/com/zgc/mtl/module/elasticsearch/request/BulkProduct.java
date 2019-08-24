@@ -1,4 +1,4 @@
-package com.zgc.mtl.elasticsearch.request;
+package com.zgc.mtl.module.elasticsearch.request;
 
 import java.util.List;
 

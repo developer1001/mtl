@@ -1,10 +1,9 @@
 server:
   port: 8082
-  servlet:  
-   context-path: /mtl
+  #servlet:  
+    #context-path: /mtl
   logging:
-   config: classpath:log4j.properties
-
+    config: classpath:log4j.properties
 spring:
   application:
     name: mtl
@@ -21,13 +20,13 @@ spring:
       #cluster-name: my-application
       cluster-nodes: 127.0.0.1:9300
     mongodb: 
-      uri: mongodb://localhost:27017/logdb
+      uri: mongodb://127.0.0.1:27017/logdb
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://192.168.153.1:3306/mtl?setUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: Centos7!
     driver-class-name: com.mysql.jdbc.Driver
     druid:
       #监控统计拦截的过滤器 不加监控界面sql无法统计 wall用于防火墙
@@ -101,14 +100,6 @@ spring:
       enable-auto-commit: true
       keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
       valueDserializer: org.apache.kafka.common.serialization.StringDeserializer
-  #热部署配置
-  devtools:
-    restart:
-      enabled: true
-      #设置重启的目录
-      #additional-paths: src/main/java
-      #classpath目录下的WEB-INF文件夹内容修改不重启
-      exclude: WEB-INF/**
   mail:
     host: smtp.qq.com # 邮箱smtp主机
     port: 587 #端口号
@@ -117,8 +108,8 @@ spring:
     protocol: smtp
     default-encoding: UTF-8      
 mybatis:
-  mapperLocations: classpath*:mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
-  configLocation: classpath:mybatis-config.xml
+  mapperLocations: classpath*:com/zgc/mtl/mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
+  configLocation: classpath:config/mybatis-config.xml
 aliyun:
   sms:
     accessKeyId: xxx

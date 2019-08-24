@@ -1,4 +1,4 @@
-package com.zgc.mtl.elasticsearch.controller;
+package com.zgc.mtl.module.elasticsearch.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zgc.mtl.elasticsearch.request.BulkProduct;
-import com.zgc.mtl.elasticsearch.response.ProductDto;
-import com.zgc.mtl.elasticsearch.service.ProductService;
 import com.zgc.mtl.model.Product;
+import com.zgc.mtl.module.elasticsearch.request.BulkProduct;
+import com.zgc.mtl.module.elasticsearch.response.ProductDto;
+import com.zgc.mtl.module.elasticsearch.service.ProductService;
 
 /**
  * es操作产品controller类

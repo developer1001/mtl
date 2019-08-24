@@ -1,0 +1,127 @@
+server:
+  port: 8082
+  #servlet:
+    #context-path: /mtl
+  logging:
+    config: classpath:log4j.properties
+spring:
+  application:
+    name: mtl
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    sst:
+      uri: http://127.0.0.1:9200
+      hostlist: 127.0.0.1:9200
+    elasticsearch:
+      #cluster-name: my-application
+      cluster-nodes: 127.0.0.1:9300
+    mongodb:
+      uri: mongodb://localhost:27017/logdb
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      #监控统计拦截的过滤器 不加监控界面sql无法统计 wall用于防火墙
+      filters: stat,wall,log4j,config
+      #最大连接数
+      max-active: 100
+      #初始化大小
+      initial-size: 5
+      #获取连接最大等待时间
+      max-wait: 60000
+      min-idle: 5
+      #间隔多久检测一次需要关闭的空闲连接 毫秒
+      time-between-eviction-runs-millis: 60000
+      #连接在连接池中最小生存的时间，毫秒
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+        url-pattern: /*
+      stat-view-servlet:
+        #白名单IP
+        allow: 127.0.0.1
+        #黑名单IP
+        #deny: 192.168.0.106
+        #登录账号和密码
+        login-username: admin
+        login-password: admin
+        #启用重置数据功能
+        reset-enable: true  
+  jpa:
+    database: MySQL
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update      
+  redis: 
+    # Redis数据库索引（默认为0）  
+    database: 0  
+    # Redis服务器地址  
+    host: 127.0.0.1 
+    # Redis服务器连接端口  
+    port: 6379  
+    # Redis服务器连接密码（默认为空）  
+    #password:   
+    # 连接超时时间（毫秒）  
+    timeout: 2000   
+    pool: 
+      # 连接池最大连接数（使用负值表示没有限制）  
+      max-active: 8 
+      # 连接池最大阻塞等待时间（使用负值表示没有限制）  
+      max-wait: -1  
+      # 连接池中的最大空闲连接  
+      max-idle: 8 
+      # 连接池中的最小空闲连接  
+      min-idle: 0
+  kafka:
+    bootstrap-servers: 192.168.153.1:9092
+    producer:
+      keyDeserializer: org.apache.kafka.common.serialization.StringSerializer
+      valueDserializer: org.apache.kafka.common.serialization.StringSerializer
+      batch-size: 16384
+      buffer-memory: 33554432    
+    consumer:
+      group-id: test-consumer-group
+      enable-auto-commit: true
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #热部署配置
+  devtools:
+    restart:
+      enabled: true
+      #设置重启的目录
+      #additional-paths: src/main/java
+      #classpath目录下的WEB-INF文件夹内容修改不重启
+      exclude: WEB-INF/**
+  mail:
+    host: smtp.qq.com # 邮箱smtp主机
+    port: 587 #端口号
+    username: test@qq.com
+    password: asfajksbrfse  # 这里QQ邮箱开通POP3/SMTP提供的授权码，如果邮箱服务商没有授权码，可以使用密码代替
+    protocol: smtp
+    default-encoding: UTF-8      
+mybatis:
+  mapperLocations: classpath*:com/zgc/mtl/mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
+  configLocation: classpath:config/mybatis-config.xml
+aliyun:
+  sms:
+    accessKeyId: xxx
+    accessSecret: xxx
+    signName: yourSignName
+    templateCode: yourTemplateId
+  

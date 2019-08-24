@@ -1,4 +1,4 @@
-package com.zgc.mtl.elasticsearch.service;
+package com.zgc.mtl.module.elasticsearch.service;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 
-import com.zgc.mtl.elasticsearch.request.BulkProduct;
-import com.zgc.mtl.elasticsearch.response.ProductDto;
 import com.zgc.mtl.model.Product;
+import com.zgc.mtl.module.elasticsearch.request.BulkProduct;
+import com.zgc.mtl.module.elasticsearch.response.ProductDto;
 
 /**
  * 产品

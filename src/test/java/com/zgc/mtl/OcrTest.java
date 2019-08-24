@@ -7,7 +7,7 @@ import com.zgc.mtl.common.util.OCRUtil;
 public class OcrTest {
 	@Test
 	public void ocr() throws Exception {
-		String fileUrl = "‪C:\\bd_logo1.png";
+		String fileUrl = "qqqq.jpg";
 		OCRUtil.ocr(fileUrl);
 	}
 }

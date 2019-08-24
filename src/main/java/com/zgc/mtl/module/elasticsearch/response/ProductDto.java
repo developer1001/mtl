@@ -1,4 +1,4 @@
-package com.zgc.mtl.elasticsearch.response;
+package com.zgc.mtl.module.elasticsearch.response;
 
 import java.math.BigDecimal;
 import java.util.Date;

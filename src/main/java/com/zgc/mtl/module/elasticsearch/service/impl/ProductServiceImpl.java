@@ -1,4 +1,4 @@
-package com.zgc.mtl.elasticsearch.service.impl;
+package com.zgc.mtl.module.elasticsearch.service.impl;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -56,11 +56,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zgc.mtl.common.enu.StrEnum;
 import com.zgc.mtl.common.util.RedisTool;
-import com.zgc.mtl.elasticsearch.dao.ProductRepository;
-import com.zgc.mtl.elasticsearch.request.BulkProduct;
-import com.zgc.mtl.elasticsearch.response.ProductDto;
-import com.zgc.mtl.elasticsearch.service.ProductService;
 import com.zgc.mtl.model.Product;
+import com.zgc.mtl.module.elasticsearch.dao.ProductRepository;
+import com.zgc.mtl.module.elasticsearch.request.BulkProduct;
+import com.zgc.mtl.module.elasticsearch.response.ProductDto;
+import com.zgc.mtl.module.elasticsearch.service.ProductService;
 /**
  * 产品service，elasticsearch
  * @date 2019-07-10 18:08:46

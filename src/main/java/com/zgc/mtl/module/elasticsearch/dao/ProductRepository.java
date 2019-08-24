@@ -1,4 +1,4 @@
-package com.zgc.mtl.elasticsearch.dao;
+package com.zgc.mtl.module.elasticsearch.dao;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Component;

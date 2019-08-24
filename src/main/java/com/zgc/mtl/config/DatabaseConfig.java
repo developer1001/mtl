@@ -1,15 +1,11 @@
 package com.zgc.mtl.config;
 
-import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
 //@Configuration
 public class DatabaseConfig {
@@ -31,4 +27,22 @@ public class DatabaseConfig {
 //    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
 //        return new SqlSessionTemplate(sqlSessionFactory);
 //    }
+	
+//	@Bean  
+//    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+//        
+//        PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
+//        String[] locations = {
+//                "config/application.properties"
+//        };
+//        
+//        List<ClassPathResource> locationsList = new ArrayList<ClassPathResource>();
+//        
+//        for(String location: locations){
+//            locationsList.add(new ClassPathResource(location));
+//        }
+////        new ClassPathResource0
+//        p.setLocations(locationsList.toArray(new ClassPathResource[1]));
+//        return p;
+//    }    
 }
