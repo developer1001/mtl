@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zgc.mtl.mybatisGenerator.dao.TInvestProfitExtendMapper">
+	<select id="getRecentTotalMoney" parameterType="java.lang.String"
+		resultType="java.lang.Long">
+		SELECT IFNULL((SELECT curr_total FROM t_invest_profit WHERE order_id =
+		#{orderId}
+		AND profit_day = (SELECT
+		MAX(profit_day) FROM t_invest_profit  WHERE order_id = #{orderId})),
+		(SELECT purchase_quota FROM t_invest_order WHERE order_id = #{orderId}))
+	</select>
+
+	<select id="getRecentProfit" parameterType="com.zgc.mtl.controller.requestParam.InvestProfitDetail"
+		resultType="com.zgc.mtl.service.impl.dto.Investprofit">
+		SELECT a.order_id, c.name product_name, a.profit_day, a.profit 
+		FROM t_invest_profit a
+		INNER JOIN t_invest_order b ON a.order_id = b.order_id
+		INNER JOIN t_invest_product c ON b.prd_id = c.prd_id
+		WHERE a.order_id IN
+			<foreach collection="orderId" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=VARCHAR}
+			</foreach>
+			<!-- <if test=" recentDays !=null">
+				AND a.profit_day BETWEEN (DATE(DATE_SUB(CURDATE(),INTERVAL #{recentDays} DAY))) AND (DATE(DATE_SUB(CURDATE(),INTERVAL 1 DAY)))
+			</if> -->
+			AND a.profit_day BETWEEN DATE_FORMAT(#{from},'%Y-%m-%d') AND DATE_FORMAT(#{to},'%Y-%m-%d')
+		ORDER BY a.order_id,a.profit_day ASC 
+	</select>
+	
+	<select id="checkExist" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM t_invest_profit WHERE order_id = #{orderId,jdbcType=VARCHAR} 
+		AND profit_day = DATE_FORMAT(#{profitDay},'%Y-%m-%d')
+	</select>
+	
+	<select id="avgProfit" resultType="com.zgc.mtl.service.impl.dto.AvgProfit">
+		SELECT any_value(c.name) name, 
+		CONCAT(SUM(a.profit)/DATEDIFF(MAX(a.profit_day),MIN(a.profit_day)),'（金额：分）') AS day_avg,
+		CONCAT(SUM(a.profit)/DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))/b.purchase_quota*1000000,'（金额：分）') AS ten_thousand_day_avg
+		FROM t_invest_profit a, t_invest_order b, t_invest_product c
+		WHERE a.order_id = b.order_id AND b.prd_id = c.prd_id
+		GROUP BY c.name 
+		ORDER BY SUM(a.profit)/DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))/b.purchase_quota*1000000 DESC
+	</select>
+</mapper>

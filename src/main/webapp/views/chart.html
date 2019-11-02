@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="chart">
+<meta name="keywords" content="chart">
+<link href="/static/bootstrap-4.3.1/css/bootstrap.css" rel="stylesheet">
+<!-- <link href="/static/bootstrap-4.3.1/css/bootstrap-datetimepicker.css" rel="stylesheet"> -->
+<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/static/js/echarts.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap-4.3.1/js/bootstrap.js"></script>
+<!-- <script type="text/javascript" src="/static/bootstrap-4.3.1/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/static/bootstrap-4.3.1/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
+<title>统计图表</title>
+</head>
+<style>
+</style>
+<script type="text/javascript">
+	function btn(){
+		var recentDays = parseInt($("#recentDays").val());
+		var orderIds =[];//定义一个数组    
+        $('input[name="prd"]:checked').each(function(){//遍历每一个复选框，其中选中的执行函数    
+        	orderIds.push($(this).val());//将选中的值添加到数组chk_value中    
+        });
+		
+		$.ajax({
+			 type:"GET",
+	         url:"/investProfit/recent?",
+	 		 traditional: true,//避免参数名带‘[]’
+	 		 data:{
+	 			  "orderId": orderIds,
+	 			  "recentDays":recentDays
+	 		 },
+	         dataType:"json",
+	         success:function(data){
+		 			if(data == null){
+		 				return;
+		 			}
+		 			var avg = data.avg;
+		 			var html = "<div>----产品平均收益统计----</div>";
+		 			for(i=0; i<avg.length; i++){
+		 				html += "<div>"+ "<span style='color:orange'>" + avg[i].name + "</span>" + ":" + 
+		 						"日均收益：" + avg[i].dayAvg + "；&nbsp;&nbsp;&nbsp;" + 
+		 						"万元日均收益：" + avg[i].tenThousandDayAvg + "</div>";
+		 			}
+		 			html += "<hr>";
+		 			document.getElementById("avg").innerHTML = html;
+		 			data = data.detail;
+		 			var xArr = [];
+		 			for(i=0; i<data[0].length;i++){
+		 				xArr.push(data[0][i].profitDay);
+		 			}
+		 			var yArr = [];
+	 				//legend
+	 				var legend = []
+	 				//itemStyle : { normal: {label : {show: true}}}
+	 				var label = {};
+	 				label.show = true;
+	 				var normal = {};
+	 				normal.label = label;
+	 				var itemStyle = {};
+	 				itemStyle.normal= normal;
+		 			for(i=0 ; i<data.length; i++){
+		 				legend.push(data[i][0].productName);
+		 				var obj = {};
+		 				obj.type = "line";
+		 				obj.name = data[i][0].productName;
+		 				var arr = []
+		 				for(j=0; j<data[i].length;j++){
+		 					arr.push(data[i][j].profit);
+		 				}
+		 				obj.data = arr;
+		 				obj.itemStyle = itemStyle;
+		 				yArr.push(obj);
+		 			}
+		 			chart(xArr,yArr,legend);
+	         },
+	         error:function(jqXHR){
+				 chart(null,null,null);
+	         }
+		});
+	}
+
+	function chart(xArr,yArr,legend) {
+		var div_ = document.getElementById("main");
+		div_.removeAttribute("_echarts_instance_");//加上这句
+		var myChart = echarts.init(div_);
+		if(xArr == null || yArr == null){
+			legend = ["--"];
+			xArr = [ "--", "--", "--", "--", "--", "--", "--" ];
+			yArr = [];
+		    var obj = {};
+		    obj.data = [ 0, 0, 0, 0, 0, 0, 0 ];
+		    obj.name = "--";
+		    obj.type = "line";
+		    yArr.push(obj);
+		}
+		// 基于准备好的dom，初始化echarts实例
+		var myChart = echarts.init(document.getElementById('main'));
+
+		// 指定图表的配置项和数据
+		var option = {
+			title : {
+				text : 'profit console'
+			},
+			tooltip : {
+				 trigger: 'axis'
+			},
+			legend : {
+				data : legend
+			},
+			xAxis : {
+				data : xArr,
+				axisLabel : {
+					rotate : 90
+				}
+			},
+			yAxis : {
+				type : 'value'
+			},
+			series : yArr
+		};
+
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+	}
+	function dateSet(){
+		/* $("#datetimeStart").datetimepicker({
+			format: 'yyyy-mm-dd',
+			minView:'month',
+			language: 'zh-CN',
+			autoclose:true,
+			startDate:new Date()
+			}).on("click",function(){
+			$("#datetimeStart").datetimepicker("setEndDate",$("#datetimeEnd").val())
+			}); */
+		$("#datetimeStart").datetimepicker({
+			format: 'yyyy-mm-dd',
+			minView:'month',
+			language: 'zh-CN',
+			autoclose:true
+			//startDate:new Date()
+			});
+		$("#datetimeEnd").datetimepicker({
+			format: 'yyyy-mm-dd',
+			minView:'month',
+			language: 'zh-CN',
+			autoclose:true
+			//startDate:new Date()
+			});
+	}
+	$(function() {
+		chart(null,null);
+		//dateSet();
+	})
+</script>
+<body>
+	<div class="container">
+		<input type="checkbox" name="prd" value="1" checked="checked" /> 安邦 
+		<input type="checkbox" name="prd" value="2"  /> 久久 
+		<input type="checkbox" name="prd" value="3"  /> 博时 
+		<select id="recentDays">
+			<option value="0"></option>
+			<option value="3">最近3天</option>
+			<option value="7">最近7天</option>
+			<option value="15">最近15天</option>
+			<option value="30">最近30天</option>
+		</select>
+		<!-- <span>日期周期</span>
+			<input size="5" type="text" id="datetimeStart" readonly class="form_datetime form-control">
+			<span> 至 </span>
+			<input size="5" type="text" id="datetimeEnd" readonly class="form_datetime form-control"> -->
+		<button id="btn" onclick="btn()">查询</button>
+		<div id="avg"></div>
+	</div>
+	<div id="main" style="width: 1200px; height: 400px;"></div>
+</body>
+</html>
