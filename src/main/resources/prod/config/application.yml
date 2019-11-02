@@ -24,10 +24,10 @@ spring:
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.153.1:3306/mtl?setUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://192.168.153.1:3306/mtl?setUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: Centos7!
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       #监控统计拦截的过滤器 不加监控界面sql无法统计 wall用于防火墙
       filters: stat,wall,log4j,config

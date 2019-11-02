@@ -24,10 +24,10 @@ spring:
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://127.0.0.1:3306/mtl?setUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://114.55.34.119:3306/mtl?setUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       #监控统计拦截的过滤器 不加监控界面sql无法统计 wall用于防火墙
       filters: stat,wall,log4j,config
@@ -54,7 +54,7 @@ spring:
         url-pattern: /*
       stat-view-servlet:
         #白名单IP
-        allow: 127.0.0.1
+        #allow: 127.0.0.1
         #黑名单IP
         #deny: 192.168.0.106
         #登录账号和密码
@@ -114,7 +114,32 @@ spring:
     username: test@qq.com
     password: asfajksbrfse  # 这里QQ邮箱开通POP3/SMTP提供的授权码，如果邮箱服务商没有授权码，可以使用密码代替
     protocol: smtp
-    default-encoding: UTF-8      
+    default-encoding: UTF-8
+  #quartz:
+    #相关属性配置
+    #properties:
+      #org:
+        #quartz:
+          #scheduler:
+            #instanceName: clusteredScheduler
+            #instanceId: AUTO
+          #jobStore:
+            #class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            #driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            #tablePrefix: QRTZ_
+            #isClustered: true
+            #clusterCheckinInterval: 10000
+            #useProperties: false
+          #threadPool:
+            #class: org.quartz.simpl.SimpleThreadPool
+            #threadCount: 10
+            #threadPriority: 5
+            #threadsInheritContextClassLoaderOfInitializingThread: true
+    #数据库方式
+    job-store-type: jdbc
+    #初始化表结构
+    jdbc:
+      initialize-schema: never
 mybatis:
   mapperLocations: classpath*:com/zgc/mtl/mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
   configLocation: classpath:config/mybatis-config.xml

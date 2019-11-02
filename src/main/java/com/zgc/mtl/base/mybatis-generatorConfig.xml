@@ -53,8 +53,9 @@
             <property name="suppressDate" value="true"/>
         </commentGenerator>
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/mtl?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;useInformationSchema=true" userId="root"
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/mtl2?useUnicode=true&amp;characterEncoding=utf-8
+                        &amp;useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;allowPublicKeyRetrieval=true" userId="root"
                         password="123456">
             <property name="useInformationSchema" value="true"/>
         </jdbcConnection>
@@ -82,7 +83,7 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <table tableName="t_healthy" domainObjectName="THealthy">
+        <table tableName="base_sex" domainObjectName="BaseSex">
         </table>
        <!--  <table tableName="t_healthy" domainObjectName="THealthy"
                enableCountByExample="false" enableUpdateByExample="false"
