@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : localhost
 Source Server Version : 50728
 Source Host           : localhost:3306
-Source Database       : mtl2
+Source Database       : mtl
 
 Target Server Type    : MYSQL
 Target Server Version : 50728
 File Encoding         : 65001
 
-Date: 2019-11-02 14:37:10
+Date: 2019-11-12 14:15:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -298,7 +298,7 @@ INSERT INTO `sys_user` VALUES ('1', '管理员', 'admin', 'e10adc3949ba59abbe56e
 INSERT INTO `sys_user` VALUES ('2', '超级管理员', 'superadmin', 'e10adc3949ba59abbe56e057f20f883e', '1');
 INSERT INTO `sys_user` VALUES ('5', '企业1', '问', 'e10adc3949ba59abbe56e057f20f883e', '1');
 INSERT INTO `sys_user` VALUES ('7', '测试改', 'ceshi11', 'e10adc3949ba59abbe56e057f20f883e', '0');
-INSERT INTO `sys_user` VALUES ('8', 'sss', 'sss', 'e10adc3949ba59abbe56e057f20f883e', '1');
+INSERT INTO `sys_user` VALUES ('8', '经理', 'manager', 'e10adc3949ba59abbe56e057f20f883e', '1');
 INSERT INTO `sys_user` VALUES ('9', '9号员工', 's', '7f6ffaa6bb0b408017b62254211691b5', '1');
 
 -- ----------------------------
@@ -378,6 +378,9 @@ CREATE TABLE `t_invest_order` (
 INSERT INTO `t_invest_order` VALUES ('1', 'e31e1cd693159fc458cb7ca71f4d4af5', '1', '2019-10-14', '100000', '2019-10-15', '2019-11-14', '2019-11-15', '2019年11月15日 24点前', '余额宝或支付宝余额', '2019-11-02 13:20:57', 'admin', '2019-11-02 13:20:46', 'admin');
 INSERT INTO `t_invest_order` VALUES ('2', 'e31e1cd693159fc458cb7ca71f4d4af5', '2', '2019-10-21', '1480000', '2019-10-21', '2020-01-31', '2020-02-03', '2020年2月3日 24点前', '余额宝或支付宝余额', '2019-11-02 13:21:07', 'admin', '2019-11-02 13:21:11', 'admin');
 INSERT INTO `t_invest_order` VALUES ('3', 'e31e1cd693159fc458cb7ca71f4d4af5', '3', '2019-09-04', '1000000', '2019-09-05', null, null, 'T+2赎回到银行卡', '银行卡', '2019-11-02 13:29:36', 'admin', '2019-11-02 13:29:40', 'admin');
+INSERT INTO `t_invest_order` VALUES ('4', 'e31e1cd693159fc458cb7ca71f4d4af5', '4', '2019-11-10', '300000', '2019-11-12', null, null, null, null, '2019-11-12 11:25:44', 'admin', '2019-11-12 11:25:48', 'admin');
+INSERT INTO `t_invest_order` VALUES ('5', 'e31e1cd693159fc458cb7ca71f4d4af5', '5', '2019-11-10', '100000', '2019-11-12', null, null, null, null, '2019-11-12 12:37:49', 'admin', '2019-11-12 12:37:52', 'admin');
+INSERT INTO `t_invest_order` VALUES ('6', 'e31e1cd693159fc458cb7ca71f4d4af5', '6', '2019-11-11', '200000', '2019-11-12', null, null, null, null, '2019-11-12 12:41:35', 'admin', '2019-11-12 12:41:39', 'admin');
 
 -- ----------------------------
 -- Table structure for t_invest_platform
@@ -407,6 +410,7 @@ DROP TABLE IF EXISTS `t_invest_product`;
 CREATE TABLE `t_invest_product` (
   `prd_id` int(2) NOT NULL AUTO_INCREMENT COMMENT '产品id',
   `name` varchar(20) NOT NULL COMMENT '产品名称',
+  `short_name` varchar(10) NOT NULL COMMENT '产品简称',
   `platform_id` int(1) NOT NULL COMMENT '平台id',
   `type` varchar(1) NOT NULL COMMENT '投资类型',
   `min_buy` bigint(10) NOT NULL COMMENT '起购金额（以分为单位）',
@@ -416,14 +420,17 @@ CREATE TABLE `t_invest_product` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `update_user` varchar(20) NOT NULL COMMENT '更新人',
   PRIMARY KEY (`prd_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='投资产品表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='投资产品表';
 
 -- ----------------------------
 -- Records of t_invest_product
 -- ----------------------------
-INSERT INTO `t_invest_product` VALUES ('1', '安邦安增益31天', '1', '1', '100000', '31', '2019-11-02 12:58:58', 'admin', '2019-11-02 12:59:01', 'admin');
-INSERT INTO `t_invest_product` VALUES ('2', '太平久久', '1', '1', '100000', '99', '2019-11-02 12:59:59', 'admin', '2019-11-02 13:00:04', 'admin');
-INSERT INTO `t_invest_product` VALUES ('3', '博时现金宝A', '2', '2', '1', null, '2019-11-02 13:00:56', 'admin', '2019-11-02 13:01:00', 'admin');
+INSERT INTO `t_invest_product` VALUES ('1', '安邦安增益31天', '安邦31天', '1', '1', '100000', '31', '2019-11-02 12:58:58', 'admin', '2019-11-02 12:59:01', 'admin');
+INSERT INTO `t_invest_product` VALUES ('2', '太平久久', '太平久久', '1', '1', '100000', '99', '2019-11-02 12:59:59', 'admin', '2019-11-02 13:00:04', 'admin');
+INSERT INTO `t_invest_product` VALUES ('3', '博时现金宝A', '博时现A', '2', '2', '1', null, '2019-11-02 13:00:56', 'admin', '2019-11-02 13:01:00', 'admin');
+INSERT INTO `t_invest_product` VALUES ('4', '长江养老月安享', '长江月享', '1', '1', '100000', '30', '2019-11-12 11:22:21', 'admin', '2019-11-12 11:22:25', 'admin');
+INSERT INTO `t_invest_product` VALUES ('5', '平安富盈45天', '平安盈45', '1', '1', '100000', '45', '2019-11-12 12:35:50', 'admin', '2019-11-12 12:35:54', 'admin');
+INSERT INTO `t_invest_product` VALUES ('6', '平安金通30天', '平安金30', '1', '1', '100000', '30', '2019-11-12 12:40:27', 'admin', '2019-11-12 12:40:31', 'admin');
 
 -- ----------------------------
 -- Table structure for t_invest_profit
@@ -440,7 +447,7 @@ CREATE TABLE `t_invest_profit` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `update_user` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '更新人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COMMENT='订单收益明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8 COMMENT='订单收益明细表';
 
 -- ----------------------------
 -- Records of t_invest_profit
@@ -502,6 +509,26 @@ INSERT INTO `t_invest_profit` VALUES ('54', '1', '2019-10-28', '10', '100126', '
 INSERT INTO `t_invest_profit` VALUES ('55', '1', '2019-10-29', '12', '100138', '2019-11-02 14:18:10', 'admin', '2019-11-02 14:18:10', 'admin');
 INSERT INTO `t_invest_profit` VALUES ('56', '1', '2019-10-30', '8', '100146', '2019-11-02 14:18:24', 'admin', '2019-11-02 14:18:24', 'admin');
 INSERT INTO `t_invest_profit` VALUES ('57', '1', '2019-10-31', '8', '100154', '2019-11-02 14:18:27', 'admin', '2019-11-02 14:18:27', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('58', '2', '2019-11-01', '435', '1481961', '2019-11-04 10:19:33', 'admin', '2019-11-04 10:19:33', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('59', '1', '2019-11-01', '25', '100179', '2019-11-04 10:20:06', 'admin', '2019-11-04 10:20:06', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('60', '1', '2019-11-04', '10', '100189', '2019-11-05 09:15:13', 'admin', '2019-11-05 09:15:13', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('61', '2', '2019-11-04', '175', '1482136', '2019-11-05 09:15:24', 'admin', '2019-11-05 09:15:24', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('62', '3', '2019-11-04', '207', '1004091', '2019-11-05 09:15:43', 'admin', '2019-11-05 09:15:43', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('63', '3', '2019-11-05', '69', '1004160', '2019-11-06 16:15:11', 'admin', '2019-11-06 16:15:11', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('64', '2', '2019-11-05', '151', '1482287', '2019-11-06 16:15:55', 'admin', '2019-11-06 16:15:55', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('65', '1', '2019-11-05', '11', '100200', '2019-11-06 16:16:04', 'admin', '2019-11-06 16:16:04', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('66', '1', '2019-11-06', '9', '100209', '2019-11-09 21:27:59', 'admin', '2019-11-09 21:27:59', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('67', '1', '2019-11-07', '9', '100218', '2019-11-09 21:28:06', 'admin', '2019-11-09 21:28:06', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('68', '2', '2019-11-06', '151', '1482438', '2019-11-09 21:30:29', 'admin', '2019-11-09 21:30:29', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('69', '2', '2019-11-07', '150', '1482588', '2019-11-09 21:30:35', 'admin', '2019-11-09 21:30:35', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('70', '3', '2019-11-06', '69', '1004229', '2019-11-09 21:31:37', 'admin', '2019-11-09 21:31:37', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('71', '3', '2019-11-07', '55', '1004284', '2019-11-09 21:31:47', 'admin', '2019-11-09 21:31:47', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('72', '1', '2019-11-08', '25', '100243', '2019-11-12 12:44:18', 'admin', '2019-11-12 12:44:18', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('73', '1', '2019-11-11', '9', '100252', '2019-11-12 12:44:27', 'admin', '2019-11-12 12:44:27', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('74', '2', '2019-11-08', '442', '1483030', '2019-11-12 12:45:12', 'admin', '2019-11-12 12:45:12', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('75', '2', '2019-11-11', '183', '1483213', '2019-11-12 12:45:25', 'admin', '2019-11-12 12:45:25', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('76', '3', '2019-11-08', '69', '1004353', '2019-11-12 12:47:29', 'admin', '2019-11-12 12:47:29', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('77', '3', '2019-11-11', '192', '1004545', '2019-11-12 12:47:43', 'admin', '2019-11-12 12:47:43', 'admin');
 
 -- ----------------------------
 -- Table structure for t_invest_type
@@ -575,6 +602,7 @@ INSERT INTO `t_person` VALUES ('4', '四号', '26');
 DROP PROCEDURE IF EXISTS `hi`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hi`()
+    NO SQL
 SELECT 'hello'
 ;;
 DELIMITER ;
@@ -585,6 +613,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `proc_getbyname`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_getbyname`(userName VARCHAR(20))
+    READS SQL DATA
 BEGIN	
 	SELECT u.* FROM sys_user u WHERE u.user_name LIKE CONCAT('%',userName,'%');
 END
@@ -597,6 +626,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `proc_while`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_while`(IN a INT,b INT)
+    NO SQL
 BEGIN	
 	DECLARE c INT DEFAULT 0;
 	WHILE b < 10 DO
@@ -615,6 +645,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `pr_demo_in`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_demo_in`(in id int)
+    NO SQL
 begin
     if (id is not null)then set id = id + 1;
     end if;
@@ -629,6 +660,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `pr_demo_inout`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_demo_inout`(inout id int)
+    NO SQL
 begin
     if (id is not null)then set id = id + 1;
     end if;
@@ -643,6 +675,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `pr_demo_out`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_demo_out`(out id int)
+    NO SQL
 begin
     if (id is not null)then set id = id + 1;
     end if;
@@ -657,6 +690,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `sumab`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sumab`(a int,b int)
+    NO SQL
 BEGIN
 	DECLARE c int;
 	if a is null THEN SET a = 0;
