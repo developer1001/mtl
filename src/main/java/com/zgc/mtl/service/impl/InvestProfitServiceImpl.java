@@ -22,6 +22,7 @@ import com.zgc.mtl.mybatisGenerator.dao.TInvestProfitMapper;
 import com.zgc.mtl.mybatisGenerator.entity.TInvestProfit;
 import com.zgc.mtl.service.InvestProfitService;
 import com.zgc.mtl.service.impl.dto.AvgProfit;
+import com.zgc.mtl.service.impl.dto.InvestOrders;
 import com.zgc.mtl.service.impl.dto.Investprofit;
 /**
  * 
@@ -116,6 +117,11 @@ public class InvestProfitServiceImpl implements InvestProfitService {
 			result.put("detail", ordersProfit);
 		}
 		return result;
+	}
+
+	@Override
+	public List<InvestOrders> getAllOrders() {
+		return profitExtendMapper.getAllOrders();
 	}
 
 }

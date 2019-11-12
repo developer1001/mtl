@@ -1,7 +1,6 @@
 package com.zgc.mtl.controller;
 
 import java.util.List;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zgc.mtl.controller.requestParam.InvestProfitDetail;
 import com.zgc.mtl.mybatisGenerator.entity.TInvestProfit;
 import com.zgc.mtl.service.InvestProfitService;
-import com.zgc.mtl.service.impl.dto.Investprofit;
+import com.zgc.mtl.service.impl.dto.InvestOrders;
 
 /**
  * 
@@ -32,5 +31,11 @@ public class InvestProfitController {
 	public Object recentProfit(InvestProfitDetail request){
 		Object detail = investProfitService.recentProfit(request);
 		return detail;
+	}
+	
+	@RequestMapping("allOrders")
+	public List<InvestOrders> getAllOrders(){
+		List<InvestOrders> allOrders = investProfitService.getAllOrders();
+		return allOrders;
 	}
 }

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zgc.mtl.mybatisGenerator.dao.TInvestProfitExtendMapper">
-	<select id="getRecentTotalMoney" parameterType="java.lang.String"
-		resultType="java.lang.Long">
-		SELECT IFNULL((SELECT curr_total FROM t_invest_profit WHERE order_id =
-		#{orderId}
-		AND profit_day = (SELECT
-		MAX(profit_day) FROM t_invest_profit  WHERE order_id = #{orderId})),
+	<select id="getRecentTotalMoney" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT IFNULL((SELECT curr_total FROM t_invest_profit WHERE order_id = #{orderId} AND 
+		profit_day = (SELECT MAX(profit_day) FROM t_invest_profit  WHERE order_id = #{orderId})),
 		(SELECT purchase_quota FROM t_invest_order WHERE order_id = #{orderId}))
 	</select>
 
@@ -34,12 +31,17 @@
 	</select>
 	
 	<select id="avgProfit" resultType="com.zgc.mtl.service.impl.dto.AvgProfit">
-		SELECT any_value(c.name) name, 
+		SELECT c.name, 
 		CONCAT(SUM(a.profit)/DATEDIFF(MAX(a.profit_day),MIN(a.profit_day)),'（金额：分）') AS day_avg,
 		CONCAT(SUM(a.profit)/DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))/b.purchase_quota*1000000,'（金额：分）') AS ten_thousand_day_avg
 		FROM t_invest_profit a, t_invest_order b, t_invest_product c
 		WHERE a.order_id = b.order_id AND b.prd_id = c.prd_id
-		GROUP BY c.name 
+		GROUP BY c.name,b.purchase_quota 
 		ORDER BY SUM(a.profit)/DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))/b.purchase_quota*1000000 DESC
+	</select>
+	
+	<select id="getAllOrders" resultType="com.zgc.mtl.service.impl.dto.InvestOrders">
+		SELECT a.order_id, b.short_name
+		FROM t_invest_order a,t_invest_product b WHERE a.prd_id = b.prd_id 
 	</select>
 </mapper>

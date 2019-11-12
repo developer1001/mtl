@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.zgc.mtl.controller.requestParam.InvestProfitDetail;
 import com.zgc.mtl.service.impl.dto.AvgProfit;
+import com.zgc.mtl.service.impl.dto.InvestOrders;
 import com.zgc.mtl.service.impl.dto.Investprofit;
 
 public interface TInvestProfitExtendMapper {
@@ -20,6 +21,14 @@ public interface TInvestProfitExtendMapper {
      * @return
      */
     int checkExist(@Param("orderId")String orderId, @Param("profitDay")Date profitDay);
-    
+    /**
+     * 平均收益
+     * @return
+     */
     List<AvgProfit> avgProfit();
+    /**
+     * 产品列表
+     * @return
+     */
+    List<InvestOrders> getAllOrders();
 }
