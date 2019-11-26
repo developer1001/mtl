@@ -24,7 +24,7 @@ spring:
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.182.248:3306/mtl?setUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/mtl?setUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: ypp
     password: Mysql@123
     driver-class-name: com.mysql.cj.jdbc.Driver
