@@ -31,12 +31,12 @@
 	</select>
 	
 	<select id="avgProfit" resultType="com.zgc.mtl.service.impl.dto.AvgProfit">
-		SELECT CONCAT(c.name,'（购买时间：',b.purchase_date,'）') name, 
+		SELECT a.order_id,CONCAT(c.name,'（购于：',b.purchase_date,'）') name, 
 		CONCAT(SUM(a.profit)/(DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))+1),'（金额：分）') AS day_avg,
 		CONCAT(SUM(a.profit)/(DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))+1)/b.purchase_quota*1000000,'（金额：分）') AS ten_thousand_day_avg
 		FROM t_invest_profit a, t_invest_order b, t_invest_product c
 		WHERE a.order_id = b.order_id AND b.prd_id = c.prd_id
-		GROUP BY c.name,b.purchase_quota ,b.purchase_date
+		GROUP BY a.order_id,c.name,b.purchase_quota ,b.purchase_date
 		ORDER BY SUM(a.profit)/(DATEDIFF(MAX(a.profit_day),MIN(a.profit_day))+1)/b.purchase_quota*1000000 DESC
 	</select>
 	

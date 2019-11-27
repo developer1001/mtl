@@ -5,6 +5,7 @@ package com.zgc.mtl.service.impl.dto;
  * @author yang
  */
 public class AvgProfit {
+	private String orderId;
 	private String name;
 	private String dayAvg;
 	private String tenThousandDayAvg;
@@ -25,5 +26,11 @@ public class AvgProfit {
 	}
 	public void setTenThousandDayAvg(String tenThousandDayAvg) {
 		this.tenThousandDayAvg = tenThousandDayAvg;
+	}
+	public String getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 }

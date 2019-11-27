@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zgc.mtl.common.util.MailUtil;
+import com.zgc.mtl.common.util.QYEmailUtil;
 import com.zgc.mtl.model.Mail;
 
 /**
@@ -39,5 +40,10 @@ public class MailController {
 	@PostMapping(value = "/attachment", produces = "application/json;charset=utf-8")
 	public void sendAttachmentMail(@RequestBody Mail mail) throws MessagingException {
 		mailUtil.sendAttachmentMail(mail);
+	}
+	
+	@RequestMapping(value = "/qiyeEmail")
+	public void qiyeEmail(Mail mail) {
+		QYEmailUtil.send(mail);
 	}
 }
