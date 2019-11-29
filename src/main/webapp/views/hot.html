@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="hot">
+<meta name="keywords" content="hot">
+<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+<title>hot</title>
+</head>
+<style>
+</style>
+<script type="text/javascript">
+	function hot(){
+		$.ajax({
+			 type:"GET",
+	         url:"/job/hotSearch?",
+	         dataType:"json",
+	         success:function(data){
+		 			var html = "";
+		 			for(i = 0; i < data.length; i++){
+		 				if(i == data.length -1 ){
+		 					html += "<div>" +  data[i] + "</div>"
+		 					break;
+		 				}
+		 				html += "<div>" + "<a href='https://s.weibo.com/weibo?q=%23" + data[i] 
+		 				+ "%23&Refer=top' target='_blank'>" + data[i] + "</a></div>"
+		 			}
+		 			$("body").html("");
+		 			$("body").html(html);
+	 		}
+	 	});
+	}
+	$(function() {
+		hot();
+		setInterval("hot()", 60000);
+	})
+</script>
+<body>
+</body>
+</html>
