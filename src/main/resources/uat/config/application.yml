@@ -106,7 +106,34 @@ spring:
     username: test@qq.com
     password: asfajksbrfse  # 这里QQ邮箱开通POP3/SMTP提供的授权码，如果邮箱服务商没有授权码，可以使用密码代替
     protocol: smtp
-    default-encoding: UTF-8      
+    default-encoding: UTF-8     
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            # 如果使用集群，实例名需相同
+            instanceName: QuartzScheduler
+            # 如果使用集群，id需相同
+            instanceId: CLUSTERED
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    #数据库方式
+    job-store-type: jdbc
+    #初始化表结构
+    jdbc:
+      initialize-schema: never   
 mybatis:
   mapperLocations: classpath*:com/zgc/mtl/mapper/*.xml, com/zgc/mtl/mybatisGenerator/mapper/*.xml
   configLocation: classpath:config/mybatis-config.xml

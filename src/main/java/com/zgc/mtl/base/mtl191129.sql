@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50728
-Source Host           : localhost:3306
+Source Server         : yang
+Source Server Version : 80018
+Source Host           : 39.106.182.248:3306
 Source Database       : mtl
 
 Target Server Type    : MYSQL
-Target Server Version : 50728
+Target Server Version : 80018
 File Encoding         : 65001
 
-Date: 2019-11-12 14:15:26
+Date: 2019-11-29 16:18:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,12 +20,12 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `base_sex`;
 CREATE TABLE `base_sex` (
-  `sex_id` varchar(1) NOT NULL COMMENT '主键',
-  `sex` varchar(2) NOT NULL COMMENT '性别',
+  `sex_id` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `sex` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '性别',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '更新人',
   PRIMARY KEY (`sex_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='性别基表';
 
@@ -41,13 +41,13 @@ INSERT INTO `base_sex` VALUES ('2', '未知', '2019-11-02 00:00:00', 'admin', '2
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_blob_triggers`;
 CREATE TABLE `qrtz_blob_triggers` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `TRIGGER_NAME` varchar(190) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `BLOB_DATA` blob,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  KEY `SCHED_NAME` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  KEY `SCHED_NAME` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`) USING BTREE,
+  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -59,8 +59,8 @@ CREATE TABLE `qrtz_blob_triggers` (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_calendars`;
 CREATE TABLE `qrtz_calendars` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `CALENDAR_NAME` varchar(190) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `CALENDAR` blob NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`CALENDAR_NAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -74,44 +74,46 @@ CREATE TABLE `qrtz_calendars` (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_cron_triggers`;
 CREATE TABLE `qrtz_cron_triggers` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `TRIGGER_NAME` varchar(190) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
-  `CRON_EXPRESSION` varchar(120) NOT NULL,
-  `TIME_ZONE_ID` varchar(80) DEFAULT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `CRON_EXPRESSION` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TIME_ZONE_ID` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qrtz_cron_triggers
 -- ----------------------------
+INSERT INTO `qrtz_cron_triggers` VALUES ('QuartzScheduler', 'com.zgc.mtl.module.task.quartz.job.HelloJob', 'ATAO_TRIGGERGROUP', '0 0/1 * * * ?', 'Asia/Shanghai');
+INSERT INTO `qrtz_cron_triggers` VALUES ('QuartzScheduler', 'com.zgc.mtl.module.task.quartz.job.HotSearchJob', 'ATAO_TRIGGERGROUP', '0 0/2 * * * ? *', 'Asia/Shanghai');
 
 -- ----------------------------
 -- Table structure for qrtz_fired_triggers
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_fired_triggers`;
 CREATE TABLE `qrtz_fired_triggers` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `ENTRY_ID` varchar(95) NOT NULL,
-  `TRIGGER_NAME` varchar(190) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
-  `INSTANCE_NAME` varchar(190) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ENTRY_ID` varchar(95) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `INSTANCE_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `FIRED_TIME` bigint(13) NOT NULL,
   `SCHED_TIME` bigint(13) NOT NULL,
   `PRIORITY` int(11) NOT NULL,
-  `STATE` varchar(16) NOT NULL,
-  `JOB_NAME` varchar(190) DEFAULT NULL,
-  `JOB_GROUP` varchar(190) DEFAULT NULL,
-  `IS_NONCONCURRENT` varchar(1) DEFAULT NULL,
-  `REQUESTS_RECOVERY` varchar(1) DEFAULT NULL,
+  `STATE` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `JOB_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `JOB_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`ENTRY_ID`),
-  KEY `IDX_QRTZ_FT_TRIG_INST_NAME` (`SCHED_NAME`,`INSTANCE_NAME`),
-  KEY `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY` (`SCHED_NAME`,`INSTANCE_NAME`,`REQUESTS_RECOVERY`),
-  KEY `IDX_QRTZ_FT_J_G` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
-  KEY `IDX_QRTZ_FT_JG` (`SCHED_NAME`,`JOB_GROUP`),
-  KEY `IDX_QRTZ_FT_T_G` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  KEY `IDX_QRTZ_FT_TG` (`SCHED_NAME`,`TRIGGER_GROUP`)
+  KEY `IDX_QRTZ_FT_TRIG_INST_NAME` (`SCHED_NAME`,`INSTANCE_NAME`) USING BTREE,
+  KEY `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY` (`SCHED_NAME`,`INSTANCE_NAME`,`REQUESTS_RECOVERY`) USING BTREE,
+  KEY `IDX_QRTZ_FT_J_G` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`) USING BTREE,
+  KEY `IDX_QRTZ_FT_JG` (`SCHED_NAME`,`JOB_GROUP`) USING BTREE,
+  KEY `IDX_QRTZ_FT_T_G` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`) USING BTREE,
+  KEY `IDX_QRTZ_FT_TG` (`SCHED_NAME`,`TRIGGER_GROUP`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -123,32 +125,34 @@ CREATE TABLE `qrtz_fired_triggers` (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_job_details`;
 CREATE TABLE `qrtz_job_details` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `JOB_NAME` varchar(190) NOT NULL,
-  `JOB_GROUP` varchar(190) NOT NULL,
-  `DESCRIPTION` varchar(250) DEFAULT NULL,
-  `JOB_CLASS_NAME` varchar(250) NOT NULL,
-  `IS_DURABLE` varchar(1) NOT NULL,
-  `IS_NONCONCURRENT` varchar(1) NOT NULL,
-  `IS_UPDATE_DATA` varchar(1) NOT NULL,
-  `REQUESTS_RECOVERY` varchar(1) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `JOB_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `JOB_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `DESCRIPTION` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `JOB_CLASS_NAME` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `IS_DURABLE` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `IS_UPDATE_DATA` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `JOB_DATA` blob,
   PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
-  KEY `IDX_QRTZ_J_REQ_RECOVERY` (`SCHED_NAME`,`REQUESTS_RECOVERY`),
-  KEY `IDX_QRTZ_J_GRP` (`SCHED_NAME`,`JOB_GROUP`)
+  KEY `IDX_QRTZ_J_REQ_RECOVERY` (`SCHED_NAME`,`REQUESTS_RECOVERY`) USING BTREE,
+  KEY `IDX_QRTZ_J_GRP` (`SCHED_NAME`,`JOB_GROUP`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qrtz_job_details
 -- ----------------------------
+INSERT INTO `qrtz_job_details` VALUES ('QuartzScheduler', 'com.zgc.mtl.module.task.quartz.job.HelloJob', 'ATAO_JOBGROUP', null, 'com.zgc.mtl.module.task.quartz.job.HelloJob', '0', '0', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F40000000000010770800000010000000007800);
+INSERT INTO `qrtz_job_details` VALUES ('QuartzScheduler', 'com.zgc.mtl.module.task.quartz.job.HotSearchJob', 'ATAO_JOBGROUP', null, 'com.zgc.mtl.module.task.quartz.job.HotSearchJob', '0', '0', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F40000000000010770800000010000000007800);
 
 -- ----------------------------
 -- Table structure for qrtz_locks
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_locks`;
 CREATE TABLE `qrtz_locks` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `LOCK_NAME` varchar(40) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `LOCK_NAME` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`LOCK_NAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -157,14 +161,16 @@ CREATE TABLE `qrtz_locks` (
 -- ----------------------------
 INSERT INTO `qrtz_locks` VALUES ('clusteredScheduler', 'STATE_ACCESS');
 INSERT INTO `qrtz_locks` VALUES ('clusteredScheduler', 'TRIGGER_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('QuartzScheduler', 'STATE_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('QuartzScheduler', 'TRIGGER_ACCESS');
 
 -- ----------------------------
 -- Table structure for qrtz_paused_trigger_grps
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_paused_trigger_grps`;
 CREATE TABLE `qrtz_paused_trigger_grps` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -177,8 +183,8 @@ CREATE TABLE `qrtz_paused_trigger_grps` (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_scheduler_state`;
 CREATE TABLE `qrtz_scheduler_state` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `INSTANCE_NAME` varchar(190) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `INSTANCE_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
   `CHECKIN_INTERVAL` bigint(13) NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`INSTANCE_NAME`)
@@ -188,20 +194,21 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- Records of qrtz_scheduler_state
 -- ----------------------------
 INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-T4A4EQD1572673916740', '1572676627652', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('QuartzScheduler', 'CLUSTERED', '1575015510556', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_simple_triggers`;
 CREATE TABLE `qrtz_simple_triggers` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `TRIGGER_NAME` varchar(190) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `REPEAT_COUNT` bigint(7) NOT NULL,
   `REPEAT_INTERVAL` bigint(12) NOT NULL,
   `TIMES_TRIGGERED` bigint(10) NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -213,22 +220,22 @@ CREATE TABLE `qrtz_simple_triggers` (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_simprop_triggers`;
 CREATE TABLE `qrtz_simprop_triggers` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `TRIGGER_NAME` varchar(190) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
-  `STR_PROP_1` varchar(512) DEFAULT NULL,
-  `STR_PROP_2` varchar(512) DEFAULT NULL,
-  `STR_PROP_3` varchar(512) DEFAULT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `STR_PROP_1` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `STR_PROP_2` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `STR_PROP_3` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `INT_PROP_1` int(11) DEFAULT NULL,
   `INT_PROP_2` int(11) DEFAULT NULL,
   `LONG_PROP_1` bigint(20) DEFAULT NULL,
   `LONG_PROP_2` bigint(20) DEFAULT NULL,
   `DEC_PROP_1` decimal(13,4) DEFAULT NULL,
   `DEC_PROP_2` decimal(13,4) DEFAULT NULL,
-  `BOOL_PROP_1` varchar(1) DEFAULT NULL,
-  `BOOL_PROP_2` varchar(1) DEFAULT NULL,
+  `BOOL_PROP_1` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `BOOL_PROP_2` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -240,41 +247,43 @@ CREATE TABLE `qrtz_simprop_triggers` (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_triggers`;
 CREATE TABLE `qrtz_triggers` (
-  `SCHED_NAME` varchar(120) NOT NULL,
-  `TRIGGER_NAME` varchar(190) NOT NULL,
-  `TRIGGER_GROUP` varchar(190) NOT NULL,
-  `JOB_NAME` varchar(190) NOT NULL,
-  `JOB_GROUP` varchar(190) NOT NULL,
-  `DESCRIPTION` varchar(250) DEFAULT NULL,
+  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `JOB_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `JOB_GROUP` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `DESCRIPTION` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `NEXT_FIRE_TIME` bigint(13) DEFAULT NULL,
   `PREV_FIRE_TIME` bigint(13) DEFAULT NULL,
   `PRIORITY` int(11) DEFAULT NULL,
-  `TRIGGER_STATE` varchar(16) NOT NULL,
-  `TRIGGER_TYPE` varchar(8) NOT NULL,
+  `TRIGGER_STATE` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TRIGGER_TYPE` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `START_TIME` bigint(13) NOT NULL,
   `END_TIME` bigint(13) DEFAULT NULL,
-  `CALENDAR_NAME` varchar(190) DEFAULT NULL,
+  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `MISFIRE_INSTR` smallint(2) DEFAULT NULL,
   `JOB_DATA` blob,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  KEY `IDX_QRTZ_T_J` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
-  KEY `IDX_QRTZ_T_JG` (`SCHED_NAME`,`JOB_GROUP`),
-  KEY `IDX_QRTZ_T_C` (`SCHED_NAME`,`CALENDAR_NAME`),
-  KEY `IDX_QRTZ_T_G` (`SCHED_NAME`,`TRIGGER_GROUP`),
-  KEY `IDX_QRTZ_T_STATE` (`SCHED_NAME`,`TRIGGER_STATE`),
-  KEY `IDX_QRTZ_T_N_STATE` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
-  KEY `IDX_QRTZ_T_N_G_STATE` (`SCHED_NAME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
-  KEY `IDX_QRTZ_T_NEXT_FIRE_TIME` (`SCHED_NAME`,`NEXT_FIRE_TIME`),
-  KEY `IDX_QRTZ_T_NFT_ST` (`SCHED_NAME`,`TRIGGER_STATE`,`NEXT_FIRE_TIME`),
-  KEY `IDX_QRTZ_T_NFT_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`),
-  KEY `IDX_QRTZ_T_NFT_ST_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_STATE`),
-  KEY `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
-  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
+  KEY `IDX_QRTZ_T_J` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`) USING BTREE,
+  KEY `IDX_QRTZ_T_JG` (`SCHED_NAME`,`JOB_GROUP`) USING BTREE,
+  KEY `IDX_QRTZ_T_C` (`SCHED_NAME`,`CALENDAR_NAME`) USING BTREE,
+  KEY `IDX_QRTZ_T_G` (`SCHED_NAME`,`TRIGGER_GROUP`) USING BTREE,
+  KEY `IDX_QRTZ_T_STATE` (`SCHED_NAME`,`TRIGGER_STATE`) USING BTREE,
+  KEY `IDX_QRTZ_T_N_STATE` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`,`TRIGGER_STATE`) USING BTREE,
+  KEY `IDX_QRTZ_T_N_G_STATE` (`SCHED_NAME`,`TRIGGER_GROUP`,`TRIGGER_STATE`) USING BTREE,
+  KEY `IDX_QRTZ_T_NEXT_FIRE_TIME` (`SCHED_NAME`,`NEXT_FIRE_TIME`) USING BTREE,
+  KEY `IDX_QRTZ_T_NFT_ST` (`SCHED_NAME`,`TRIGGER_STATE`,`NEXT_FIRE_TIME`) USING BTREE,
+  KEY `IDX_QRTZ_T_NFT_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`) USING BTREE,
+  KEY `IDX_QRTZ_T_NFT_ST_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_STATE`) USING BTREE,
+  KEY `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_GROUP`,`TRIGGER_STATE`) USING BTREE,
+  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qrtz_triggers
 -- ----------------------------
+INSERT INTO `qrtz_triggers` VALUES ('QuartzScheduler', 'com.zgc.mtl.module.task.quartz.job.HelloJob', 'ATAO_TRIGGERGROUP', 'com.zgc.mtl.module.task.quartz.job.HelloJob', 'ATAO_JOBGROUP', null, '1575005940000', '1575005880000', '5', 'PAUSED', 'CRON', '1574937153000', '0', null, '0', '');
+INSERT INTO `qrtz_triggers` VALUES ('QuartzScheduler', 'com.zgc.mtl.module.task.quartz.job.HotSearchJob', 'ATAO_TRIGGERGROUP', 'com.zgc.mtl.module.task.quartz.job.HotSearchJob', 'ATAO_JOBGROUP', null, '1575015600000', '1575015480000', '5', 'WAITING', 'CRON', '1575005703000', '0', null, '0', '');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -282,13 +291,13 @@ CREATE TABLE `qrtz_triggers` (
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `user_name` varchar(40) NOT NULL COMMENT '用户名',
-  `login_name` varchar(40) NOT NULL COMMENT '登录名',
-  `password` varchar(100) NOT NULL COMMENT '密码',
+  `user_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `login_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录名',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
   `is_active` int(1) NOT NULL DEFAULT '0' COMMENT '0未激活，1激活状态',
   PRIMARY KEY (`id`),
   UNIQUE KEY `loginName` (`login_name`) USING BTREE,
-  UNIQUE KEY `UQ_loginUser` (`login_name`)
+  UNIQUE KEY `UQ_loginUser` (`login_name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -306,14 +315,14 @@ INSERT INTO `sys_user` VALUES ('9', '9号员工', 's', '7f6ffaa6bb0b408017b62254
 -- ----------------------------
 DROP TABLE IF EXISTS `t_customer`;
 CREATE TABLE `t_customer` (
-  `id` varchar(255) NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `birthday` datetime DEFAULT NULL,
-  `name` varchar(64) NOT NULL,
-  `phone` varchar(64) DEFAULT NULL,
-  `sex` varchar(1) DEFAULT NULL,
-  `created_by` varchar(64) DEFAULT NULL,
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `phone` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `sex` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `created_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,
-  `updated_by` varchar(64) DEFAULT NULL,
+  `updated_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `updated_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -335,7 +344,7 @@ CREATE TABLE `t_healthy` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `level` double(10,3) DEFAULT NULL COMMENT '指数',
   `level_type` int(2) DEFAULT NULL COMMENT '1:bg（血糖）; 2:weight; 3:bp（血压）',
-  `user_id` varchar(20) DEFAULT NULL COMMENT '用户编号',
+  `user_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户编号',
   `create_date` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='健康指数表';
@@ -355,20 +364,20 @@ INSERT INTO `t_healthy` VALUES ('8', '3.300', '4', '5', '2019-07-28 11:20:45');
 -- ----------------------------
 DROP TABLE IF EXISTS `t_invest_order`;
 CREATE TABLE `t_invest_order` (
-  `order_id` varchar(3) NOT NULL COMMENT '订单编号',
-  `user_id` varchar(50) NOT NULL COMMENT 'user_id',
+  `order_id` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单编号',
+  `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'user_id',
   `prd_id` int(2) NOT NULL COMMENT '产品id',
   `purchase_date` date NOT NULL COMMENT '购买日期',
   `purchase_quota` bigint(10) NOT NULL COMMENT '购买金额（以分为单位）',
   `profit_begin` date NOT NULL COMMENT '收益开始日',
   `expire_date` date DEFAULT NULL COMMENT '到期日',
   `extract_date` date DEFAULT NULL COMMENT '到账日',
-  `extract_description` varchar(100) DEFAULT NULL COMMENT '到账描述',
-  `extract_mode` varchar(100) DEFAULT NULL COMMENT '到账方式',
+  `extract_description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '到账描述',
+  `extract_mode` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '到账方式',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '更新人',
   PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='投资订单表';
 
@@ -387,13 +396,13 @@ INSERT INTO `t_invest_order` VALUES ('6', 'e31e1cd693159fc458cb7ca71f4d4af5', '6
 -- ----------------------------
 DROP TABLE IF EXISTS `t_invest_platform`;
 CREATE TABLE `t_invest_platform` (
-  `platform_id` varchar(1) NOT NULL COMMENT '投资平台id',
-  `name` varchar(20) NOT NULL COMMENT '投资平台名称',
-  `description` varchar(20) DEFAULT NULL COMMENT '平台描述',
+  `platform_id` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '投资平台id',
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '投资平台名称',
+  `description` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '平台描述',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '更新人',
   PRIMARY KEY (`platform_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='投资平台表';
 
@@ -409,16 +418,16 @@ INSERT INTO `t_invest_platform` VALUES ('2', '招商银行', null, '2019-11-02 1
 DROP TABLE IF EXISTS `t_invest_product`;
 CREATE TABLE `t_invest_product` (
   `prd_id` int(2) NOT NULL AUTO_INCREMENT COMMENT '产品id',
-  `name` varchar(20) NOT NULL COMMENT '产品名称',
-  `short_name` varchar(10) NOT NULL COMMENT '产品简称',
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '产品名称',
+  `short_name` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '产品简称',
   `platform_id` int(1) NOT NULL COMMENT '平台id',
-  `type` varchar(1) NOT NULL COMMENT '投资类型',
+  `type` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '投资类型',
   `min_buy` bigint(10) NOT NULL COMMENT '起购金额（以分为单位）',
   `period` int(5) DEFAULT NULL COMMENT '产品期限',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '更新人',
   PRIMARY KEY (`prd_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='投资产品表';
 
@@ -438,16 +447,16 @@ INSERT INTO `t_invest_product` VALUES ('6', '平安金通30天', '平安金30', 
 DROP TABLE IF EXISTS `t_invest_profit`;
 CREATE TABLE `t_invest_profit` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_id` varchar(2) NOT NULL COMMENT '订单编号',
+  `order_id` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单编号',
   `profit_day` date NOT NULL COMMENT '收益日',
   `profit` bigint(10) NOT NULL COMMENT '收益（以分为单位）',
   `curr_total` bigint(10) NOT NULL COMMENT '当日截止，总金额（以分为单位）',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'admin' COMMENT '创建人',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'admin' COMMENT '更新人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8 COMMENT='订单收益明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=149 DEFAULT CHARSET=utf8 COMMENT='订单收益明细表';
 
 -- ----------------------------
 -- Records of t_invest_profit
@@ -529,18 +538,89 @@ INSERT INTO `t_invest_profit` VALUES ('74', '2', '2019-11-08', '442', '1483030',
 INSERT INTO `t_invest_profit` VALUES ('75', '2', '2019-11-11', '183', '1483213', '2019-11-12 12:45:25', 'admin', '2019-11-12 12:45:25', 'admin');
 INSERT INTO `t_invest_profit` VALUES ('76', '3', '2019-11-08', '69', '1004353', '2019-11-12 12:47:29', 'admin', '2019-11-12 12:47:29', 'admin');
 INSERT INTO `t_invest_profit` VALUES ('77', '3', '2019-11-11', '192', '1004545', '2019-11-12 12:47:43', 'admin', '2019-11-12 12:47:43', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('78', '1', '2019-11-12', '10', '100262', '2019-11-13 09:07:55', 'admin', '2019-11-13 09:07:55', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('79', '2', '2019-11-12', '158', '1483371', '2019-11-13 09:09:01', 'admin', '2019-11-13 09:09:01', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('80', '4', '2019-11-12', '34', '300034', '2019-11-13 09:10:30', 'admin', '2019-11-13 09:10:30', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('81', '5', '2019-11-12', '10', '100010', '2019-11-13 09:11:14', 'admin', '2019-11-13 09:11:14', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('82', '6', '2019-11-12', '20', '200020', '2019-11-13 09:13:14', 'admin', '2019-11-13 09:13:14', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('83', '1', '2019-11-13', '9', '100271', '2019-11-14 10:12:58', 'admin', '2019-11-14 10:12:58', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('84', '2', '2019-11-13', '157', '1483528', '2019-11-14 10:13:46', 'admin', '2019-11-14 10:13:46', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('85', '4', '2019-11-13', '30', '300064', '2019-11-14 10:41:08', 'admin', '2019-11-14 10:41:08', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('86', '5', '2019-11-13', '10', '100020', '2019-11-14 10:41:21', 'admin', '2019-11-14 10:41:21', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('87', '6', '2019-11-13', '19', '200039', '2019-11-14 10:41:40', 'admin', '2019-11-14 10:41:40', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('88', '1', '2019-11-14', '9', '100280', '2019-11-15 16:12:50', 'admin', '2019-11-15 16:12:50', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('89', '2', '2019-11-14', '157', '1483685', '2019-11-15 16:13:00', 'admin', '2019-11-15 16:13:00', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('90', '4', '2019-11-14', '30', '300094', '2019-11-15 16:13:20', 'admin', '2019-11-15 16:13:20', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('91', '5', '2019-11-14', '10', '100030', '2019-11-15 16:13:32', 'admin', '2019-11-15 16:13:32', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('92', '6', '2019-11-14', '19', '200058', '2019-11-15 16:13:42', 'admin', '2019-11-15 16:13:42', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('93', '3', '2019-11-12', '68', '1004613', '2019-11-15 23:02:50', 'admin', '2019-11-15 23:02:50', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('94', '3', '2019-11-13', '68', '1004681', '2019-11-15 23:02:55', 'admin', '2019-11-15 23:02:55', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('95', '3', '2019-11-14', '60', '1004741', '2019-11-15 23:03:13', 'admin', '2019-11-15 23:03:13', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('96', '1', '2019-11-15', '25', '100305', '2019-11-18 14:13:52', 'admin', '2019-11-18 14:13:52', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('97', '2', '2019-11-15', '443', '1484128', '2019-11-18 14:14:22', 'admin', '2019-11-18 14:14:22', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('98', '4', '2019-11-15', '87', '300181', '2019-11-18 14:15:04', 'admin', '2019-11-18 14:15:04', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('99', '5', '2019-11-15', '28', '100058', '2019-11-18 14:15:14', 'admin', '2019-11-18 14:15:14', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('100', '6', '2019-11-15', '52', '200110', '2019-11-18 14:15:25', 'admin', '2019-11-18 14:15:25', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('101', '3', '2019-11-15', '67', '1004808', '2019-11-19 09:32:10', 'admin', '2019-11-19 09:32:10', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('102', '3', '2019-11-18', '191', '1004999', '2019-11-19 09:32:31', 'admin', '2019-11-19 09:32:31', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('103', '1', '2019-11-18', '10', '100315', '2019-11-19 09:33:33', 'admin', '2019-11-19 09:33:33', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('104', '2', '2019-11-18', '185', '1484313', '2019-11-19 09:33:43', 'admin', '2019-11-19 09:33:43', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('105', '4', '2019-11-18', '29', '300210', '2019-11-19 09:34:06', 'admin', '2019-11-19 09:34:06', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('106', '5', '2019-11-18', '11', '100069', '2019-11-19 09:34:20', 'admin', '2019-11-19 09:34:20', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('107', '6', '2019-11-18', '25', '200135', '2019-11-19 09:34:45', 'admin', '2019-11-19 09:34:45', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('108', '1', '2019-11-19', '9', '100324', '2019-11-20 14:23:19', 'admin', '2019-11-20 14:23:19', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('109', '2', '2019-11-19', '158', '1484471', '2019-11-20 14:23:30', 'admin', '2019-11-20 14:23:30', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('110', '4', '2019-11-19', '34', '300244', '2019-11-20 14:23:58', 'admin', '2019-11-20 14:23:58', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('111', '5', '2019-11-19', '10', '100079', '2019-11-20 14:24:12', 'admin', '2019-11-20 14:24:12', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('112', '6', '2019-11-19', '21', '200156', '2019-11-20 14:24:24', 'admin', '2019-11-20 14:24:24', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('113', '1', '2019-11-20', '9', '100333', '2019-11-21 09:38:11', 'admin', '2019-11-21 09:38:11', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('114', '2', '2019-11-20', '158', '1484629', '2019-11-21 09:39:01', 'admin', '2019-11-21 09:39:01', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('115', '4', '2019-11-20', '30', '300274', '2019-11-21 09:39:57', 'admin', '2019-11-21 09:39:57', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('116', '5', '2019-11-20', '10', '100089', '2019-11-21 09:41:12', 'admin', '2019-11-21 09:41:12', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('117', '6', '2019-11-20', '20', '200176', '2019-11-21 09:41:43', 'admin', '2019-11-21 09:41:43', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('118', '3', '2019-11-19', '68', '1005067', '2019-11-21 09:43:56', 'admin', '2019-11-21 09:43:56', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('119', '3', '2019-11-20', '69', '1005136', '2019-11-21 09:44:33', 'admin', '2019-11-21 09:44:33', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('120', '1', '2019-11-21', '9', '100342', '2019-11-22 09:26:55', 'admin', '2019-11-22 09:26:55', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('121', '2', '2019-11-21', '158', '1484787', '2019-11-22 09:27:57', 'admin', '2019-11-22 09:27:57', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('122', '4', '2019-11-21', '30', '300304', '2019-11-22 09:28:14', 'admin', '2019-11-22 09:28:14', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('123', '5', '2019-11-21', '10', '100099', '2019-11-22 09:28:25', 'admin', '2019-11-22 09:28:25', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('124', '6', '2019-11-21', '20', '200196', '2019-11-22 09:28:36', 'admin', '2019-11-22 09:28:36', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('125', '3', '2019-11-21', '70', '1005206', '2019-11-26 08:30:37', 'admin', '2019-11-26 08:30:37', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('126', '3', '2019-11-22', '71', '1005277', '2019-11-26 08:31:09', 'admin', '2019-11-26 08:31:09', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('127', '3', '2019-11-25', '213', '1005490', '2019-11-26 08:32:03', 'admin', '2019-11-26 08:32:03', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('128', '1', '2019-11-22', '26', '100368', '2019-11-26 09:25:18', 'admin', '2019-11-26 09:25:18', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('129', '1', '2019-11-25', '10', '100378', '2019-11-26 09:25:29', 'admin', '2019-11-26 09:25:29', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('130', '2', '2019-11-22', '449', '1485236', '2019-11-26 09:25:56', 'admin', '2019-11-26 09:25:56', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('131', '2', '2019-11-25', '185', '1485421', '2019-11-26 09:26:05', 'admin', '2019-11-26 09:26:05', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('132', '4', '2019-11-22', '87', '300391', '2019-11-26 09:27:04', 'admin', '2019-11-26 09:27:04', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('133', '4', '2019-11-25', '29', '300420', '2019-11-26 09:27:17', 'admin', '2019-11-26 09:27:17', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('134', '5', '2019-11-22', '28', '100127', '2019-11-26 09:27:38', 'admin', '2019-11-26 09:27:38', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('135', '5', '2019-11-25', '11', '100138', '2019-11-26 09:27:46', 'admin', '2019-11-26 09:27:46', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('136', '6', '2019-11-22', '54', '200250', '2019-11-26 09:28:05', 'admin', '2019-11-26 09:28:05', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('137', '6', '2019-11-25', '25', '200275', '2019-11-26 09:28:15', 'admin', '2019-11-26 09:28:15', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('138', '3', '2019-11-26', '55', '1005545', '2019-11-27 08:11:14', 'admin', '2019-11-27 08:11:14', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('139', '1', '2019-11-26', '9', '100387', '2019-11-27 08:13:44', 'admin', '2019-11-27 08:13:44', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('140', '2', '2019-11-26', '158', '1485579', '2019-11-27 08:15:21', 'admin', '2019-11-27 08:15:21', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('141', '4', '2019-11-26', '33', '300453', '2019-11-27 08:29:02', 'admin', '2019-11-27 08:29:02', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('142', '5', '2019-11-26', '10', '100148', '2019-11-27 08:30:01', 'admin', '2019-11-27 08:30:01', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('143', '6', '2019-11-26', '21', '200296', '2019-11-27 08:30:47', 'admin', '2019-11-27 08:30:47', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('144', '1', '2019-11-27', '9', '100396', '2019-11-28 11:10:16', 'admin', '2019-11-28 11:10:16', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('145', '2', '2019-11-27', '166', '1485745', '2019-11-28 11:10:35', 'admin', '2019-11-28 11:10:35', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('146', '4', '2019-11-27', '30', '300483', '2019-11-28 11:11:05', 'admin', '2019-11-28 11:11:05', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('147', '5', '2019-11-27', '10', '100158', '2019-11-28 11:11:25', 'admin', '2019-11-28 11:11:25', 'admin');
+INSERT INTO `t_invest_profit` VALUES ('148', '6', '2019-11-27', '20', '200316', '2019-11-28 11:11:32', 'admin', '2019-11-28 11:11:32', 'admin');
 
 -- ----------------------------
 -- Table structure for t_invest_type
 -- ----------------------------
 DROP TABLE IF EXISTS `t_invest_type`;
 CREATE TABLE `t_invest_type` (
-  `type_id` varchar(1) NOT NULL COMMENT '投资分类id',
-  `name` varchar(10) NOT NULL COMMENT '投资类型名称',
+  `type_id` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '投资分类id',
+  `name` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '投资类型名称',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '更新人',
   PRIMARY KEY (`type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='投资分类表';
 
@@ -557,17 +637,17 @@ INSERT INTO `t_invest_type` VALUES ('4', '股票', '2019-11-02 12:40:46', 'admin
 -- ----------------------------
 DROP TABLE IF EXISTS `t_invest_user`;
 CREATE TABLE `t_invest_user` (
-  `user_id` varchar(50) NOT NULL COMMENT 'user_id',
-  `login_name` varchar(20) NOT NULL COMMENT '登录名',
-  `nick_name` varchar(20) DEFAULT NULL COMMENT '昵称',
-  `salt` varchar(20) DEFAULT NULL COMMENT '盐值',
-  `password` varchar(50) DEFAULT NULL COMMENT '密码',
-  `sex` varchar(1) NOT NULL COMMENT '性别',
+  `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'user_id',
+  `login_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录名',
+  `nick_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '昵称',
+  `salt` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '盐值',
+  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '密码',
+  `sex` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '性别',
   `birthday` date DEFAULT NULL COMMENT '生日',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user` varchar(20) NOT NULL COMMENT '创建人',
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user` varchar(20) NOT NULL COMMENT '更新人',
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '更新人',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='投资用户信息表';
 
@@ -582,7 +662,7 @@ INSERT INTO `t_invest_user` VALUES ('e31e1cd693159fc458cb7ca71f4d4af5', 'ypp', '
 DROP TABLE IF EXISTS `t_person`;
 CREATE TABLE `t_person` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `age` int(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_name_age` (`name`,`age`) USING BTREE
@@ -594,16 +674,14 @@ CREATE TABLE `t_person` (
 INSERT INTO `t_person` VALUES ('1', '一号', '25');
 INSERT INTO `t_person` VALUES ('3', '三号', '24');
 INSERT INTO `t_person` VALUES ('2', '二号', '23');
-INSERT INTO `t_person` VALUES ('4', '四号', '26');
+INSERT INTO `t_person` VALUES ('4', '四号加4号', '26');
 
 -- ----------------------------
 -- Procedure structure for hi
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `hi`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `hi`()
-    NO SQL
-SELECT 'hello'
+
 ;;
 DELIMITER ;
 
@@ -612,11 +690,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `proc_getbyname`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_getbyname`(userName VARCHAR(20))
-    READS SQL DATA
-BEGIN	
-	SELECT u.* FROM sys_user u WHERE u.user_name LIKE CONCAT('%',userName,'%');
-END
+
 ;;
 DELIMITER ;
 
@@ -625,17 +699,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `proc_while`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_while`(IN a INT,b INT)
-    NO SQL
-BEGIN	
-	DECLARE c INT DEFAULT 0;
-	WHILE b < 10 DO
-		SET a = a + 1;
-		SET b = b + a;
-		SET c = b * 10;
-	END WHILE;
-	SELECT a ;
-END
+
 ;;
 DELIMITER ;
 
@@ -644,13 +708,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `pr_demo_in`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_demo_in`(in id int)
-    NO SQL
-begin
-    if (id is not null)then set id = id + 1;
-    end if;
-    select id as output_id;
-end
+
 ;;
 DELIMITER ;
 
@@ -659,13 +717,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `pr_demo_inout`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_demo_inout`(inout id int)
-    NO SQL
-begin
-    if (id is not null)then set id = id + 1;
-    end if;
-    select id as output_id;
-end
+
 ;;
 DELIMITER ;
 
@@ -674,13 +726,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `pr_demo_out`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_demo_out`(out id int)
-    NO SQL
-begin
-    if (id is not null)then set id = id + 1;
-    end if;
-    select id as output_id;
-end
+
 ;;
 DELIMITER ;
 
@@ -689,17 +735,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `sumab`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sumab`(a int,b int)
-    NO SQL
-BEGIN
-	DECLARE c int;
-	if a is null THEN SET a = 0;
-	END IF;
-	if b is NULL THEN SET b = 0;
-	END IF;
-	SET c = a + b;
-	SELECT c AS total;
-END
+
 ;;
 DELIMITER ;
 DROP TRIGGER IF EXISTS `tri_username`;
