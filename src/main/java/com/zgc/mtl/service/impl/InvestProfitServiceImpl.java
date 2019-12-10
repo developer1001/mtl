@@ -16,6 +16,7 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zgc.mtl.config.exception.BusinessException;
 import com.zgc.mtl.controller.requestParam.InvestProfitDetail;
 import com.zgc.mtl.mybatisGenerator.dao.TInvestProfitExtendMapper;
 import com.zgc.mtl.mybatisGenerator.dao.TInvestProfitMapper;
@@ -39,7 +40,7 @@ public class InvestProfitServiceImpl implements InvestProfitService {
 	public int insert(TInvestProfit profit) throws Exception {
 		Long recentTotalMoney = profitExtendMapper.getRecentTotalMoney(profit.getOrderId());
 		if(recentTotalMoney == null) {
-			throw new Exception("订单号不存在，请核对购买产品的订单单号");
+			throw new BusinessException("订单号不存在，请核对购买产品的订单单号");
 		}
 		int checkExist = profitExtendMapper.checkExist(profit.getOrderId(), profit.getProfitDay());
 		if(checkExist > 0) {
