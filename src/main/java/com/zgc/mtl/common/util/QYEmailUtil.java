@@ -28,12 +28,12 @@ import com.zgc.mtl.model.Mail;
  */
 public class QYEmailUtil {
 	//发送者
-	static String from = "@sinosoft.com.cn";
+	private String from = "@sinosoft.com.cn";
 	//授权码
-	static String pass = "we6Qy8vfgB4ebpei";
+	private String pass = "we6Qy8vfgB4ebpei";
 	//邮件署名
-	static String senderName = "管理员";
-	  static class MyAuthenricator extends Authenticator {
+	private String senderName = "管理员";
+	private class MyAuthenricator extends Authenticator {
 	      public MyAuthenricator() {
 	      }
  
@@ -47,7 +47,7 @@ public class QYEmailUtil {
 	   * 发送邮件
 	   * @param mail
 	   */
-	  public static void send(Mail mail){
+	  public  void send(Mail mail){
 	  	Properties prop = new Properties();
 	      //协议
 	      prop.setProperty("mail.transport.protocol", "smtp");

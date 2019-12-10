@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -21,14 +23,16 @@ import com.zgc.mtl.common.util.PostUtil;
  */
 @Component
 public class HotSearchJob extends QuartzJobBean {
+	private Logger logger = LoggerFactory.getLogger(HotSearchJob.class);
 	@Autowired
 	private StringRedisTemplate redis;
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		String redisKey = "hotSearchJson";
 		String url = "https://s.weibo.com/ajax/jsonp/gettopsug";
+		String doRequire = null;
 		try {
-			String doRequire = PostUtil.doRequire(url);
+			doRequire = PostUtil.doRequire(url);
 			String subStr = doRequire.substring(doRequire.indexOf("(") + 1 , 
 					doRequire.lastIndexOf(")}catch"));
 			JSONObject parseObject = JSONObject.parseObject(subStr);
@@ -51,6 +55,8 @@ public class HotSearchJob extends QuartzJobBean {
 			redis.opsForList().rightPush(redisKey, date);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("解析热点数据出错，源数据{}", JSONObject.toJSONString(doRequire));
+			throw new RuntimeException(e);
 		}
 	}
 

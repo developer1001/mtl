@@ -44,6 +44,6 @@ public class MailController {
 	
 	@RequestMapping(value = "/qiyeEmail")
 	public void qiyeEmail(Mail mail) {
-		QYEmailUtil.send(mail);
+		new QYEmailUtil().send(mail);
 	}
 }
