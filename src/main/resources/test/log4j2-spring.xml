@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+	<Properties>
+		<property name="LOG_HOME">logs</property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT" immediateFlush="true">
+			<PatternLayout pattern="[%-5p] [%d{yyyy-MM-dd HH:mm:ss SSS}] %c - %m%n" />
+			<!-- <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss SSS}] [%T] [%t] [%-5level] [%logger{36}] [%l] %msg%n" /> -->
+		</Console>
+		<RollingRandomAccessFile name="infoLog"
+			immediateFlush="true" fileName="${LOG_HOME}/info.log"
+			filePattern="${LOG_HOME}/infoBackup-%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout>
+				<pattern>[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] %c - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOM}" maxDepth="1">
+					<IfFileName glob="infoBackup*.gz" />
+					<IfLastModified age="10d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+			<!-- <ThresholdFilter level="info" onMatch="ACCEPT"
+				onMismatch="NEUTRAL" /> -->
+			<ThresholdFilter level="debug" onMatch="ACCEPT"
+			onMismatch="DENY" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="errorLog"
+			immediateFlush="true" fileName="${LOG_HOME}/error.log"
+			filePattern="${LOG_HOME}/errorBackup-%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout>
+				<pattern>[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] %c - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOM}" maxDepth="1">
+					<IfFileName glob="errorBackup*.gz" />
+					<IfLastModified age="10d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+			<ThresholdFilter level="error" onMatch="ACCEPT"
+				onMismatch="DENY" />
+		</RollingRandomAccessFile>
+		<!-- <RollingRandomAccessFile name="fatalLog"
+			immediateFlush="true" fileName="${LOG_HOME}/fatalService.log"
+			filePattern="${LOG_HOME}/fatalService.log.%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout>
+				<pattern>[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] %c - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOM}" maxDepth="1">
+					<IfFileName glob="fatalService*.gz" />
+					<IfLastModified age="7d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+			<ThresholdFilter level="fatal" onMatch="ACCEPT"
+				onMismatch="DENY" />
+		</RollingRandomAccessFile> -->
+		<!-- <RollingRandomAccessFile name="druidSqlLog"
+			immediateFlush="true" fileName="${LOG_HOME}/druidSql.log"
+			filePattern="${LOG_HOME}/druidSql-%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout>
+				<pattern>[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] %c - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOM}" maxDepth="1">
+					<IfFileName glob="druidSql*.gz" />
+					<IfLastModified age="3d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingRandomAccessFile> -->
+	</Appenders>
+	<Loggers>
+		<!-- 根logger的设置 -->
+		<root level="info">
+			<appender-ref ref="Console" />
+			<appender-ref ref="infoLog" />
+			<appender-ref ref="errorLog" />
+			<!-- <appender-ref ref="fatalLog" /> -->
+		</root>
+		<!-- 开启mybatis的sql日志,级别为debug或trace-->
+		<Logger name="com.zgc.mtl.dao" level="debug" additivity="true">
+			<!-- 放开后会导致控制台打印重复sql -->
+        	<!-- <appender-ref ref="Console" /> -->
+		</Logger>
+        <Logger name="com.zgc.mtl.mybatisGenerator.dao" level="debug" additivity="true">
+        	<!-- 放开后会导致控制台打印重复sql -->
+        	<!-- <appender-ref ref="Console" /> -->
+		</Logger>
+		<!-- <logger name="druid.sql.Statement" level="debug" additivity="true">
+			<appender-ref ref="druidSqlLog" />
+		</logger>
+		<logger name="druid.sql.ResultSet" level="debug" additivity="true">
+			<appender-ref ref="druidSqlLog" />
+		</logger> -->
+		<logger name="org.mybatis" level="debug" additivity="false">
+			<appender-ref ref="Console" />
+		</logger>
+		<logger name="org.springframework" level="info" additivity="false">
+			<appender-ref ref="Console" />
+		</logger>
+		<logger name="org.quartz" level="info" additivity="false">
+			<appender-ref ref="Console" />
+		</logger>
+	</Loggers>
+</Configuration>

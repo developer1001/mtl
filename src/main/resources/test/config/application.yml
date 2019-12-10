@@ -3,7 +3,7 @@ server:
   #servlet:  
     #context-path: /mtl
   logging:
-    config: classpath:log4j.properties
+    config: classpath:log4j2-spring.xml
 spring:
   application:
     name: mtl
@@ -30,7 +30,23 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       #监控统计拦截的过滤器 不加监控界面sql无法统计 wall用于防火墙
-      filters: stat,wall,log4j,config
+      filters: stat,wall,log4j2,config
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+        log4j2:
+            enabled: true
+            result-set-log-enabled: true
+            statement-executable-sql-log-enable: true
+            statement-create-after-log-enabled: false
+            statement-close-after-log-enabled: false
+            result-set-open-after-log-enabled: false
+            result-set-close-after-log-enabled: false
       #最大连接数
       max-active: 100
       #初始化大小
