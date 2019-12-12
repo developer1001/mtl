@@ -57,8 +57,7 @@ public class QYEmailUtil {
 	      prop.setProperty("mail.smtp.port", "465");
 	      //使用smtp身份验证
 	      prop.setProperty("mail.smtp.auth", "true");
-	      //使用SSL，企业邮箱必需！
-	      //开启安全协议
+	      //使用SSL安全协议
 	      MailSSLSocketFactory sf = null;
 	      try {
 	          sf = new MailSSLSocketFactory();

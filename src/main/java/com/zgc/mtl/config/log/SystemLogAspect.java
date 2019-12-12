@@ -158,7 +158,7 @@ public class SystemLogAspect {
 			return;
 		}
 		logger.info("返回结果集：{}", JSONObject.toJSONString(result));
-		logger.error("===========request end==============");
+		logger.info("===========request end==============");
 	}
 
 	/**
