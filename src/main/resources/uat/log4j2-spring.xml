@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="OFF">
+<Configuration status="WARN">
 	<Properties>
 		<property name="LOG_HOME">logs</property>
+		<property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss SSS}] [%t] [%-5level] [%l] %msg%n</property>
 	</Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT" immediateFlush="true">
-			<PatternLayout pattern="[%-5p] [%d{yyyy-MM-dd HH:mm:ss SSS}] %c - %m%n" />
-			<!-- <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss SSS}] [%T] [%t] [%-5level] [%logger{36}] [%l] %msg%n" /> -->
+			<!-- <PatternLayout pattern="[%-5p] [%d{yyyy-MM-dd HH:mm:ss SSS}] %c - %m%n" /> -->
+			<PatternLayout pattern="${LOG_PATTERN}" />
 		</Console>
 		<RollingRandomAccessFile name="infoLog"
 			immediateFlush="true" fileName="${LOG_HOME}/info.log"
 			filePattern="${LOG_HOME}/infoBackup-%d{yyyy-MM-dd}.log.gz">
 			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] %c - %m%n</pattern>
+				<pattern>${LOG_PATTERN}</pattern>
 			</PatternLayout>
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="1"
@@ -33,7 +34,7 @@
 			immediateFlush="true" fileName="${LOG_HOME}/error.log"
 			filePattern="${LOG_HOME}/errorBackup-%d{yyyy-MM-dd}.log.gz">
 			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] %c - %m%n</pattern>
+				<pattern>${LOG_PATTERN}</pattern>
 			</PatternLayout>
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="1"
@@ -99,8 +100,6 @@
         	<!-- <appender-ref ref="Console" /> -->
 		</Logger>
         <Logger name="com.zgc.mtl.mybatisGenerator.dao" level="debug" additivity="true">
-        	<!-- 放开后会导致控制台打印重复sql -->
-        	<!-- <appender-ref ref="Console" /> -->
 		</Logger>
 		<!-- <logger name="druid.sql.Statement" level="debug" additivity="true">
 			<appender-ref ref="druidSqlLog" />
@@ -108,14 +107,9 @@
 		<logger name="druid.sql.ResultSet" level="debug" additivity="true">
 			<appender-ref ref="druidSqlLog" />
 		</logger> -->
-		<logger name="org.mybatis" level="debug" additivity="false">
-			<appender-ref ref="Console" />
+		<logger name="org.mybatis" level="debug" additivity="true">
 		</logger>
-		<logger name="org.springframework" level="info" additivity="false">
-			<appender-ref ref="Console" />
-		</logger>
-		<logger name="org.quartz" level="info" additivity="false">
-			<appender-ref ref="Console" />
+		<logger name="org.springframework" level="info" additivity="true">
 		</logger>
 	</Loggers>
 </Configuration>
