@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zgc.mtl.common.util.MailUtil;
 import com.zgc.mtl.common.util.QYEmailUtil;
+import com.zgc.mtl.config.exception.BusinessException;
 import com.zgc.mtl.model.Mail;
+import com.zgc.mtl.module.task.job.SimpleJob;
 
 /**
  * 发送邮件
@@ -20,8 +22,12 @@ import com.zgc.mtl.model.Mail;
 @RestController
 @RequestMapping("mail")
 public class MailController {
+//	private static final Logger logger = LoggerFactory.getLogger(MailController.class);
 	@Autowired
 	private MailUtil mailUtil;
+	@Autowired
+	private SimpleJob job;
+	
 	@RequestMapping(value = "/simple")
 	public void sendSimpleMail(Mail mail) {
 		mailUtil.sendSimpleMail(mail);
@@ -45,5 +51,14 @@ public class MailController {
 	@RequestMapping(value = "/qiyeEmail")
 	public void qiyeEmail(Mail mail) {
 		new QYEmailUtil().send(mail);
+	}
+	
+	@RequestMapping(value = "/sendFile")
+	public void sendFile() {
+		try {
+			job.backupDbJob();
+		} catch (Exception e) {
+			throw new BusinessException("备份文件无法发出", e);
+		}
 	}
 }

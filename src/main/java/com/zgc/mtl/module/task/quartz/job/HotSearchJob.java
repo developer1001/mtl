@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zgc.mtl.common.util.PostUtil;
-import com.zgc.mtl.config.exception.BusinessException;
 /**
  * 热搜
  * @date 2019-11-28 16:10:06
@@ -22,7 +23,7 @@ import com.zgc.mtl.config.exception.BusinessException;
  */
 @Component
 public class HotSearchJob extends QuartzJobBean {
-//	private Logger logger = LoggerFactory.getLogger(HotSearchJob.class);
+	private Logger logger = LoggerFactory.getLogger(HotSearchJob.class);
 	@Autowired
 	private StringRedisTemplate redis;
 	@Override
@@ -51,7 +52,7 @@ public class HotSearchJob extends QuartzJobBean {
 			redis.opsForList().rightPushAll(redisKey, arrayList);
 			redis.opsForList().rightPush(redisKey, date);
 		} catch (Exception e) {
-			throw new BusinessException("解析热点数据出错，源数据" + JSONObject.toJSONString(doRequire));
+			logger.error("解析热点数据出错，源数据:" + JSONObject.toJSONString(doRequire));
 		}
 	}
 
