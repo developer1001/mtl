@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,22 +18,24 @@ import com.zgc.mtl.model.Mail;
 @Component
 public class SimpleJob {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleJob.class);
-	private String fileName = "";
-	private String[] receivers = new String[]{""};
+	@Value("${sucureData.dbbackup.filePath}")
+	private String filePath;
+	@Value("${sucureData.dbbackup.mail.to}")
+	private String receivers;
 	@Autowired
 	private MailUtil mailUtil;
 	
 	//每周一发备份数据邮件
-	@Scheduled(cron = "0 30 8 ? 1-12 2")
+	@Scheduled(cron = "0 0 10 ? 1-12 2")
 	public void backupDbJob() throws Exception {
 		//原始文件名
-		String attachmentName = backupDb(fileName);
+		String attachmentName = backupDb(filePath);
 		Mail mail = new Mail();
-		mail.setReceivers(receivers);
+		mail.setReceivers(receivers.split(","));
 		mail.setSubject("db backup file");
 		mail.setText("请接收最新的备份文件。");
 		mail.setAttachmentFilename(attachmentName);
-		mail.setDiskPath(fileName + attachmentName);
+		mail.setDiskPath(filePath + attachmentName);
 		mailUtil.sendAttachmentMail(mail);
 	}
 	

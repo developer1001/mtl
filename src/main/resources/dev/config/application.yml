@@ -167,4 +167,8 @@ aliyun:
     accessSecret: xxx
     signName: yourSignName
     templateCode: yourTemplateId
-  
+sucureData: 
+  dbbackup: 
+    filePath: xxxxx
+    mail:
+      to: xx@xx.com  
