@@ -1,8 +1,10 @@
 package com.zgc.mtl.module.task.job;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,8 +27,8 @@ public class SimpleJob {
 	@Autowired
 	private MailUtil mailUtil;
 	
-	//每周一发备份数据邮件
-	@Scheduled(cron = "0 0 10 ? 1-12 2")
+	//发备份数据邮件
+	@Scheduled(cron = "0 0 9 1/5 * ?")
 	public void backupDbJob() throws Exception {
 		//原始文件名
 		String attachmentName = backupDb(filePath);
