@@ -37,6 +37,7 @@ public class SimpleJob {
 		mail.setAttachmentFilename(attachmentName);
 		mail.setDiskPath(filePath + attachmentName);
 		mailUtil.sendAttachmentMail(mail);
+		logger.info("数据备份邮件已推送");
 	}
 	
 	public String backupDb(String fileName) {
