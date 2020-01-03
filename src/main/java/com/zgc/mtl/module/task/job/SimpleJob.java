@@ -51,11 +51,7 @@ public class SimpleJob {
 	public void backupCheking() throws Exception {
 		//原始文件名
 		String attachmentName = backupDb(filePath);
-		Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
-		String date = String.valueOf(year) + String.valueOf(month) + String.valueOf(day);
+		String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		if(attachmentName.contains(date)) {
 			logger.info("今日的备份文件已生成");
 			return;
