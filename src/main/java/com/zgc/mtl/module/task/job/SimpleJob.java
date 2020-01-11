@@ -3,7 +3,6 @@ package com.zgc.mtl.module.task.job;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -36,7 +35,7 @@ public class SimpleJob {
 		Mail mail = new Mail();
 		mail.setReceivers(receivers.split(","));
 		mail.setSubject("db backup file");
-		mail.setText("请接收最新的备份文件。");
+		mail.setText("请接收最新的备份文件：" + attachmentName);
 		mail.setAttachmentFilename(attachmentName);
 		mail.setDiskPath(filePath + attachmentName);
 		mailUtil.sendAttachmentMail(mail);
