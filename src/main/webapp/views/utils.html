@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width" />
+<meta charset="utf-8">
+<title>Index</title>
+<script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+	/* $(document).ready(init);
+	function init() {
+		$(":file").change(uploadfile);
+	} */
+	function uploadfile() {
+		var start = new Date().getTime();
+		var fileobj = document.getElementById("upfile").files[0];
+		var flnm = fileobj.name;
+		var reader = new FileReader();
+		reader.readAsDataURL(fileobj);
+		reader.onload = function() {
+			/*   var byts = new Uint8Array(this.result);
+			  var bytarr = [];
+			  for (var i = 0; i < byts.length; i++) {
+			      bytarr.push(byts[i]);
+			  } */
+			var dataBase64 = this.result; // result是你读取到的文件内容，此属性读取完成才能使用
+			var bytarr = dataBase64.split(";base64,");//base64文件内容
+			console.log("文件转耗时：" + (new Date().getTime() - start) + "毫秒");
+			var datas = {
+				"voiceFormat" : document.getElementById("voiceFormat").value,
+				"engSerViceType" : document.getElementById("engSerViceType").value,
+				"fileByteArr" : bytarr[1].toString()
+			};
+			$.ajax({
+						type : "POST",
+						url : "",
+						data : JSON.stringify(datas),
+						dataType : "json",
+						contentType : "application/json;charset=UTF-8",
+						success : function(data) {
+							console.log(data);
+							document.getElementById("content").innerHTML = data.Response.Result;
+						}
+					});
+		}
+	}
+
+	function enDecode() {
+		var datas = {
+			"content" : document.getElementById("sourceStr").value,
+			"type" : document.getElementById("act").value
+		};
+		$.ajax({
+					type : "POST",
+					url : "/utils/enDecode",
+					data : JSON.stringify(datas),
+					dataType : "json",
+					contentType : "application/json;charset=UTF-8",
+					success : function(data) {
+						if (data.success) {
+							document.getElementById("base64Content").innerHTML = 
+								"<span>" + data.data + "</span>";
+						}
+					}
+				});
+	}
+</script>
+</head>
+<body>
+	<div>base64加解密</div>
+	<select id="act">
+		<option value="encode">encode</option>
+		<option value="decode">decode</option>
+	</select>
+	<!-- <input type="file" id="upfile"/> -->
+	<textarea rows="5" cols="100" id="sourceStr"></textarea>
+	<input type="button" onclick="enDecode()" value="转换" />
+	<div id="base64Content"></div>
+</body>
+</html>

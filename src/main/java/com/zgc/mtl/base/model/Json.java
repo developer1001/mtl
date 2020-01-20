@@ -23,11 +23,6 @@ public class Json {
         this.data = data;
     }
 
-    public Json(boolean success,String msg){
-        this.success = success;
-        this.msg = msg;
-    }
-
     public Json(boolean success,Object data){
         this.success = success;
         this.data = data;
