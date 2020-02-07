@@ -28,7 +28,6 @@ public class UtilsContro {
 		}
 		else if(type.equals("decode")) {
 			byte[] decode = Base64.getDecoder().decode(content);
-			System.out.println(new String(decode));
 			return new Json(true, new String(decode).replaceAll("\n", "<br>"));
 		}
 		return new Json(false,"error");
