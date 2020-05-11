@@ -1,17 +1,22 @@
 package com.zgc.mtl.controller;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zgc.mtl.base.model.Json;
+import com.zgc.mtl.common.util.ExcelUtil;
 /**
  * 工具类调用
  * @date 2020-01-19 12:21:26
- * @author yang
+ * @author y
  */
 @RestController
 @RequestMapping("/utils")
@@ -31,5 +36,10 @@ public class UtilsContro {
 			return new Json(true, new String(decode).replaceAll("\n", "<br>"));
 		}
 		return new Json(false,"error");
+	}
+	
+	@RequestMapping("tableFieldInfo/toExcel")
+	public void enDecode(String filePath) throws IOException {
+		ExcelUtil.tableFieldFormat("aaa.sql");
 	}
 }
