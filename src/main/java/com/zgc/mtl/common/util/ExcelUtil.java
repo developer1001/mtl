@@ -4,15 +4,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -38,21 +41,32 @@ public class ExcelUtil {
 		FileReader ir = new FileReader(file);
 		BufferedReader br = new BufferedReader(ir);
 		String lineStr = null;
-		int index = -1;
+//		int index = -1;
 		while((lineStr  = br.readLine()) != null) {
 			if(lineStr.contains("CREATE TABLE")) {
 				//表名
 				String tableName = lineStr.substring(lineStr.indexOf("`") + 1, lineStr.lastIndexOf("`"));
-				index += 1;
+//				index += 1;
 				 //2.创建工作簿
 		        HSSFSheet sheet = hssfWorkbook.createSheet();
 		        sheet.setDefaultColumnWidth(18);
 		        //3.创建头部
 		        HSSFRow headRow = sheet.createRow(0);
+		        // 字体设置
+		        HSSFFont font = hssfWorkbook.createFont();
+		        font.setFontName("宋体");
+		        font.setBold(true);
+		        font.setCharSet(30);
+		        font.setColor(HSSFFont.COLOR_NORMAL);
+		        // 样式
+		        HSSFCellStyle cellStyle = hssfWorkbook.createCellStyle();
+		        cellStyle.setFont(font);
+		        cellStyle.setAlignment(HorizontalAlignment.CENTER); // 居中
+				//合并单元格
+		        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 		        //3.创建标题行
 		        HSSFRow titlerRow = sheet.createRow(1);
 		        titlerRow.createCell(0).setCellValue("字段名称");
-//		        titlerRow.
 		        titlerRow.createCell(1).setCellValue("字段类型");
 		        titlerRow.createCell(2).setCellValue("类型说明");
 		        titlerRow.createCell(3).setCellValue("是否为空");
@@ -99,26 +113,12 @@ public class ExcelUtil {
 			            dataRow.createCell(5).setCellValue(remark);
 					}
 				}
-//				int nextInt = new Random().nextInt();
-//				hssfWorkbook.setSheetName(index, tableName + "_" + nextInt);
-				System.out.println(tableName);
+//				hssfWorkbook.setSheetName(index, tableName);
 				 headRow.createCell(0).setCellValue(tableName);
-				
+				 headRow.getCell(0).setCellStyle(cellStyle);
 			}
 		}
 		
-//        //4.遍历数据,创建数据行
-//        for (Area area : list) {
-//            //获取最后一行的行号
-//            int lastRowNum = sheet.getLastRowNum();
-//            HSSFRow dataRow = sheet.createRow(lastRowNum + 1);
-//            dataRow.createCell(0).setCellValue(area.getProvince());
-//            dataRow.createCell(1).setCellValue(area.getCity());
-//            dataRow.createCell(2).setCellValue(area.getDistrict());
-//            dataRow.createCell(3).setCellValue(area.getPostcode());
-//            dataRow.createCell(4).setCellValue(area.getShortcode());
-//            dataRow.createCell(5).setCellValue(area.getCitycode());
-//        }
         //5.创建文件名
         String fileName = "table-field-info.xls";
         //6.获取输出流对象
