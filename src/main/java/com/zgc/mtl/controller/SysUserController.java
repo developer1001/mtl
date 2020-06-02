@@ -72,14 +72,11 @@ public class SysUserController {
     public Json addUser(SysUser user){
     	user.setPassword(MD5.MD5Encrypt(user.getPassword()));
         int a = userService.add(user);
-        if (a == 1){
-            Json json = new Json();
-            json.setSuccess(true);
-            json.setTotal(1);
-            json.setMsg("添加新用户成功");
-            return json;
-        }
-        return null;
+        Json json = new Json();
+        json.setSuccess(true);
+        json.setTotal(1);
+        json.setMsg("添加新用户成功,主键：" + user.getUserId());
+        return json;
     }
 
     @RequestMapping("updateUser")
@@ -87,7 +84,7 @@ public class SysUserController {
     public Json updateUser(SysUser user){
         user.setPassword(MD5.MD5Encrypt(user.getPassword()));
         int a = userService.update(user);
-        int userId = user.getId().intValue();
+        int userId = user.getUserId().intValue();
         if (a == 1){
             Json json = new Json();
             json.setSuccess(true);

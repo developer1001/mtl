@@ -7,7 +7,7 @@ package com.zgc.mtl.model;
  */
 public class SysUser {
 	//主键id
-	private Integer id;
+	private Integer userId;
 	//登录名
 	private String loginName;
 	//用户名
@@ -17,11 +17,11 @@ public class SysUser {
 	//是否激活启用：1是，0否
 	private Integer isActive;
 	
-	public Integer getId() {
-		return id;
+	public Integer getUserId() {
+		return userId;
 	}
 	public void setId(Integer id) {
-		this.id = id;
+		this.userId = id;
 	}
 	public String getLoginName() {
 		return loginName;

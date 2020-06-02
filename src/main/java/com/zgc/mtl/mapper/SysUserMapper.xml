@@ -4,7 +4,7 @@
 <!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 -->
 <mapper namespace="com.zgc.mtl.dao.SysUserDao">
     <!-- 添加数据 -->
-    <insert id="add" parameterType="com.zgc.mtl.model.SysUser">
+    <insert id="add" parameterType="com.zgc.mtl.model.SysUser" useGeneratedKeys="true" keyProperty="userId"> 
         insert into sys_user(user_name,password,login_name,is_active) value(#{userName},#{password},#{loginName},#{isActive})
     </insert>
     <!-- 删除数据 -->
