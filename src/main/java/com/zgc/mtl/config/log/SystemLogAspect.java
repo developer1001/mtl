@@ -1,6 +1,7 @@
 package com.zgc.mtl.config.log;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -74,9 +75,7 @@ public class SystemLogAspect {
 			}
 			String params = "";
 			if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
-				for (int i = 0; i < joinPoint.getArgs().length; i++) {
-					params += JSONObject.toJSONString(joinPoint.getArgs()[i]) + ";";
-				}
+				params += JSONObject.toJSONString(joinPoint.getArgs());
 			}
 			String ip = NetUtil.getIp(request);
 			logger.info("请求 IP:{}", ip);
