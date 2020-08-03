@@ -19,22 +19,25 @@ public class RequestUtils {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RequestUtils.class);
 	private static ArrayList<String> excludeHeadList = new ArrayList<String>();
 	static {
-		excludeHeadList.add("cache-control");
-		excludeHeadList.add("content-type");
-		excludeHeadList.add("postman-token");
-		excludeHeadList.add("content-length");
-		excludeHeadList.add("host");
-		excludeHeadList.add("user-agent");
 		excludeHeadList.add("accept");
 		excludeHeadList.add("accept-encoding");
 		excludeHeadList.add("accept-language");
+		excludeHeadList.add("cache-control");
+		excludeHeadList.add("content-type");
+		excludeHeadList.add("content-length");
 		excludeHeadList.add("connection");
 		excludeHeadList.add("cookie");
+		excludeHeadList.add("host");
+		excludeHeadList.add("origin");
+		excludeHeadList.add("postman-token");
+		excludeHeadList.add("referer");
 		excludeHeadList.add("sec-fetch-dest");
 		excludeHeadList.add("sec-fetch-mode");
 		excludeHeadList.add("sec-fetch-site");
 		excludeHeadList.add("sec-fetch-user");
+		excludeHeadList.add("sec-ch-ua");
 		excludeHeadList.add("upgrade-insecure-requests");
+		excludeHeadList.add("user-agent");
 	}
 
 	/**
