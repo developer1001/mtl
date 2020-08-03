@@ -27,4 +27,13 @@ public class AsyncTaskController {
 		System.out.println("咖啡机调用完毕,time=" + sdf.format(new Date()));
 		return "success";
 	}
+	
+	@RequestMapping("/tea")
+	public String rtea(String name) {
+		long s = System.currentTimeMillis();
+		asyncTaskService.tea(name);
+		asyncTaskService.send();
+		System.out.println("冰茶制作, 总time:" + (System.currentTimeMillis() -s));
+		return "success";
+	}
 }

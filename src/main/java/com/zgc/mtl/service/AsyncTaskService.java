@@ -11,4 +11,10 @@ public interface AsyncTaskService {
 	 * @param name
 	 */
 	void coffee(String name);
+
+	void tea(String name);
+	/**
+	 * 派送
+	 */
+	void send();
 }

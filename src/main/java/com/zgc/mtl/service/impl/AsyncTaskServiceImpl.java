@@ -25,4 +25,30 @@ public class AsyncTaskServiceImpl implements AsyncTaskService {
 		System.out.println(name + "：您的咖啡制作完毕，请取用！(" + Thread.currentThread().getName() + ")");
 	}
 
+	@Override
+	public void tea(String name) {
+		System.out.println("准备制作冰茶");
+		long s = System.currentTimeMillis();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("冰茶制作完毕");
+		System.out.println("冰茶制作, time:" + (System.currentTimeMillis() -s));
+	}
+
+	@Async
+	@Override
+	public void send() {
+		long s = System.currentTimeMillis();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("send, time:" + (System.currentTimeMillis() -s));
+	}
+	
+
 }
