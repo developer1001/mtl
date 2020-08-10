@@ -2,6 +2,8 @@ package com.zgc.mtl.module.task.job;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -86,5 +88,10 @@ public class SimpleJob {
 			fileName = files[0].getName();
 		}
 		return fileName;
+	}
+	
+	@Scheduled(cron = "0 0/1 * * * ?")
+	public void test() throws Exception {
+		System.out.println(LocalDateTime.now(ZoneId.systemDefault()));
 	}
 }
