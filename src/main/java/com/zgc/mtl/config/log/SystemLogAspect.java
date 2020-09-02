@@ -200,6 +200,7 @@ public class SystemLogAspect {
 			e.printStackTrace();
 		}
 		logger.error("发生异常！！！");
+		logger.error("发生异常了" , e);
 		logger.error("异常方法:{}，异常类:{}，异常信息:{}，方法入参:{}",
 				joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName(),
 				e.getClass().getName(), e.getMessage(), params);
