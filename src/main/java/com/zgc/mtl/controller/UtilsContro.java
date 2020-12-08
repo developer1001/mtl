@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +44,7 @@ public class UtilsContro {
 	}
 	
 	@RequestMapping("res/download")
-	public void resDownload(String url) throws IOException {
-		HttpUtils.downloadResource(url);
+	public void resDownload(String url, HttpServletResponse httpServletResponse) throws IOException {
+		HttpUtils.downloadResource(url,httpServletResponse);
 	}
 }
