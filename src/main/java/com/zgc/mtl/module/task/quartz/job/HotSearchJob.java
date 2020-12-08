@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zgc.mtl.common.util.PostUtil;
+import com.zgc.mtl.common.util.HttpUtils;
 
 /**
  * 热搜
@@ -35,7 +35,7 @@ public class HotSearchJob extends QuartzJobBean {
 		String url = "https://s.weibo.com/ajax/jsonp/gettopsug";
 		String doRequire = null;
 		try {
-			doRequire = PostUtil.doRequire(url);
+			doRequire = HttpUtils.get(url);
 		} catch (Exception e) {
 			logger.error("请求热点数据未响应");
 		}
