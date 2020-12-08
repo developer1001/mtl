@@ -78,7 +78,7 @@ public class SystemLogAspect {
 				params += JSONObject.toJSONString(joinPoint.getArgs());
 			}
 			String ip = NetUtil.getIp(request);
-			logger.info("请求 IP:{}", ip);
+			logger.info("请求 IP:【{}】,请求地址：【{}】", ip, request.getRequestURI());
 			logger.info("请求方法:{}, 请求参数：{}",
 					(joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"),
 					params);
