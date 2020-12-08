@@ -13,6 +13,10 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -114,17 +118,24 @@ public class HttpUtils {
 		return responseContent;
 	}
 	
-	public static void downloadResource(String url) throws IOException {
+	public static void downloadResource(String url, HttpServletResponse httpServletResponse) throws IOException {
 		String redirectAddress = getRedirectAddress(url);
 		 OkHttpClient client = new OkHttpClient();
-		 Request request = new Request.Builder().url(redirectAddress).get() .build();
+		 Request request = new Request.Builder().url(redirectAddress).get().build();
 		 Response response = client.newCall(request).execute();
-		 String name = System.currentTimeMillis() + ".mp4";
-//		 if (url.indexOf("/") > 0) {
-//			 name = url.substring(url.lastIndexOf("/") + 1);
-//		 }
-		 OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(name));
-		 outputStream.write(response.body().bytes());
+		 String fileName = System.currentTimeMillis() + ".mp4";
+		 if (url.indexOf(".") > 0 && (url.substring(url.lastIndexOf(".") + 1)).length() < 4) {
+			 fileName = System.currentTimeMillis() + url.substring(url.lastIndexOf(".") + 1);
+		 }
+		 byte[] bytes = response.body().bytes();
+//		 int Mb = bytes.length / (1024 * 1024);
+//		 OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(name));
+//		 outputStream.write(bytes);
+//		 outputStream.flush();
+//		 outputStream.close();
+		 httpServletResponse.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+		 OutputStream outputStream = new BufferedOutputStream(httpServletResponse.getOutputStream());
+		 outputStream.write(bytes);
 		 outputStream.flush();
 		 outputStream.close();
 	}
