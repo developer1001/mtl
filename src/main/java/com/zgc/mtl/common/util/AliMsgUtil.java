@@ -40,7 +40,7 @@ public class AliMsgUtil {
 	private static String regionId = "default";
 	
 	/**
-	 * 批量发送消息
+	 * 批量发送短消息
 	 * @param param
 	 * @return 
 	 */
